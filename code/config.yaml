@@ -1,0 +1,7 @@
+path: D:/Coding/Projects/number-plate-recognition/dataset   # datset root dir
+train: images/train     # train images (relatives to 'path')
+val: images/test     # test images (relatives to 'path')
+
+# Classes
+names: 
+  0: plat-nomor
