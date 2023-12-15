@@ -1,0 +1,12 @@
+names:
+- Plate-Number
+nc: 1
+roboflow:
+  license: CC BY 4.0
+  project: number-plate-detection-41pg3
+  url: https://universe.roboflow.com/uni-b7ajf/number-plate-detection-41pg3/dataset/1
+  version: 1
+  workspace: uni-b7ajf
+test: ../test/images
+train: Number-Plate-Detection-1/train/images
+val: Number-Plate-Detection-1/valid/images
