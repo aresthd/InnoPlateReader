@@ -11,8 +11,10 @@ module.exports = {
 				background: '#F5F5F5',
 				background2: '#C2D9FF',
 				primary: '#7752FE',
-				seconday: '#8E8FFA',
+				secondary: '#8E8FFA',
 				accent: '#190482',
+				text: '#F5F5F5',
+				text2: '#190482',
 				// text: '#190482',
 			},
       fontFamily: {
@@ -21,6 +23,10 @@ module.exports = {
         kdam: ['Kdam Thmor Pro', 'sans-serif'],
         proza: ['Proza Libre', 'sans-serif'],
         montserrat: ['Montserrat', 'sans-serif'],
+      },
+      backgroundImage: {
+        'login': "url('/static/assets/bg-login.png')",
+        'register': "url('/static/assets/bg-register.png')"
       }
     },
   },
