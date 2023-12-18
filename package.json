@@ -8,6 +8,6 @@
   },
   "dependencies": {
     "feather-icons": "^4.29.0",
-    "flowbite": "^2.2.0"
+    "flowbite": "^2.2.1"
   }
 }
