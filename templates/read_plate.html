@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Read Plate</title>
     <link rel="stylesheet" href="{{url_for('static',filename='dist/css/output.css')}}">
+    {{ dropzone.load_css() }}
+    <!-- {{ dropzone.style('border: 2px dashed #0087F7; margin: 10%; min-height: 400px;') }} -->
 </head>
 <body class="bg-background">
     <!-- Sidebar Start -->
@@ -14,7 +16,6 @@
         <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
         </svg>
     </button>
-    
     <aside id="logo-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
         <div class="h-full px-3 py-4 overflow-y-auto bg-primary">
             <a href="/" class="flex items-center ps-2.5 mb-5">
@@ -23,18 +24,9 @@
                 <span class="self-center text-2xl font-skranji whitespace-nowrap text-text hover:text-white duration-300">InnoPlateReader</span>
             </a>
             <ul class="space-y-2 font-medium">
-                <!-- <li>
-                    <a href="#" class="flex items-center p-2 text-gray-300 hover:text-text rounded-lg group">
-                        <svg class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21">
-                        <path d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z"/>
-                        <path d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z"/>
-                        </svg>
-                        <span class="ms-3">Dashboard</span>
-                    </a>
-                </li> -->
                 <!-- Read Plate -->
                 <li>
-                    <a href="#" class="flex items-center p-2 text-text hover:text-text rounded-lg group">
+                    <a href="/read_plate" class="flex items-center p-2 text-text hover:text-text duration-300 rounded-lg group">
                         <!-- <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 18">
                         <path d="M6.143 0H1.857A1.857 1.857 0 0 0 0 1.857v4.286C0 7.169.831 8 1.857 8h4.286A1.857 1.857 0 0 0 8 6.143V1.857A1.857 1.857 0 0 0 6.143 0Zm10 0h-4.286A1.857 1.857 0 0 0 10 1.857v4.286C10 7.169 10.831 8 11.857 8h4.286A1.857 1.857 0 0 0 18 6.143V1.857A1.857 1.857 0 0 0 16.143 0Zm-10 10H1.857A1.857 1.857 0 0 0 0 11.857v4.286C0 17.169.831 18 1.857 18h4.286A1.857 1.857 0 0 0 8 16.143v-4.286A1.857 1.857 0 0 0 6.143 10Zm10 0h-4.286A1.857 1.857 0 0 0 10 11.857v4.286c0 1.026.831 1.857 1.857 1.857h4.286A1.857 1.857 0 0 0 18 16.143v-4.286A1.857 1.857 0 0 0 16.143 10Z"/>
                         </svg> -->
@@ -44,12 +36,27 @@
                         <span class="flex-1 ms-3 whitespace-nowrap">Read Plate</span>
                     </a>
                 </li>
-                <!-- Account -->
+                <!-- Upgrade Model -->
                 <li>
-                    <a href="#" class="flex items-center p-2 text-gray-300 hover:text-text rounded-lg group">
-                        <!-- <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
-                        <path d="M14 2a3.963 3.963 0 0 0-1.4.267 6.439 6.439 0 0 1-1.331 6.638A4 4 0 1 0 14 2Zm1 9h-1.264A6.957 6.957 0 0 1 15 15v2a2.97 2.97 0 0 1-.184 1H19a1 1 0 0 0 1-1v-1a5.006 5.006 0 0 0-5-5ZM6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Z"/>
+                    <a href="#" class="flex items-center p-2 text-gray-300 hover:text-text duration-300 rounded-lg group">
+                        <!-- <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 18">
+                        <path d="M6.143 0H1.857A1.857 1.857 0 0 0 0 1.857v4.286C0 7.169.831 8 1.857 8h4.286A1.857 1.857 0 0 0 8 6.143V1.857A1.857 1.857 0 0 0 6.143 0Zm10 0h-4.286A1.857 1.857 0 0 0 10 1.857v4.286C10 7.169 10.831 8 11.857 8h4.286A1.857 1.857 0 0 0 18 6.143V1.857A1.857 1.857 0 0 0 16.143 0Zm-10 10H1.857A1.857 1.857 0 0 0 0 11.857v4.286C0 17.169.831 18 1.857 18h4.286A1.857 1.857 0 0 0 8 16.143v-4.286A1.857 1.857 0 0 0 6.143 10Zm10 0h-4.286A1.857 1.857 0 0 0 10 11.857v4.286c0 1.026.831 1.857 1.857 1.857h4.286A1.857 1.857 0 0 0 18 16.143v-4.286A1.857 1.857 0 0 0 16.143 10Z"/>
                         </svg> -->
+                        <svg width="24" height="24" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                            <rect width="40" height="40" fill="url(#pattern0)"/>
+                            <defs>
+                            <pattern id="pattern0" patternContentUnits="objectBoundingBox" width="1" height="1">
+                            <use xlink:href="#image0_337_545" transform="scale(0.0111111)"/>
+                            </pattern>
+                            <image id="image0_337_545" width="90" height="90" xlink:href="data:image/png;base64,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"/>
+                            </defs>
+                        </svg>
+                        <span class="flex-1 ms-3 whitespace-nowrap">Upgrade Model</span>
+                    </a>
+                </li>
+                <!-- Account -->
+                <!-- <li>
+                    <a href="#" class="flex items-center p-2 text-gray-300 hover:text-text rounded-lg group">
                         <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor">
                             <g id="about">
                                 <path d="M16,16A7,7,0,1,0,9,9,7,7,0,0,0,16,16ZM16,4a5,5,0,1,1-5,5A5,5,0,0,1,16,4Z"/>
@@ -59,7 +66,7 @@
                                 
                         <span class="flex-1 ms-3 whitespace-nowrap">Account</span>
                     </a>
-                </li>
+                </li> -->
                 <!-- <li>
                     <a href="#" class="flex items-center p-2 text-gray-300 hover:text-text rounded-lg group">
                         <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
@@ -78,84 +85,49 @@
     <!-- Main Start -->
     <section class="p-4 sm:ml-64">
         <div class="p-4">
-            <h2 class="text-3xl md:text-4xl font-montserrat font-bold text-accent mt-2 ">Read Your Plate</h2>
-
+            <h2 class="text-3xl md:text-4xl font-montserrat font-bold text-accent mt-2 ">Read Your Plate  </h2>
             <!-- File Upload -->
             <div class="w-full max-w-sm min-h-fit p-8 bg-white border border-gray-200 rounded-lg shadow-lg md:p-10 mx-auto mt-10">
-                <form class="text-center" action="#">
-                    <!-- <div class="flex items-center justify-center w-full">
-                        <label for="dropzone-file" class="relative flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
-                            <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                                <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
-                                </svg>
-                                <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
-                            </div>
-                            <input id="dropzone-file" type="file" class="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"/>
-                        </label>
-                    </div>  -->
-
-                    <div class="flex items-center justify-center w-full">
-                        <label for="dropzone-file" class="relative flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
-                            <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                                <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
-                                </svg>
-                                <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">PNG or JPG (MAX. 800x400px)</p>
-                            </div>
-                            <input id="dropzone-file" type="file" class="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer" />
-                        </label>
-                    </div> 
-
-                    <!-- <input type="file" name="data-input" accept=".csv" class="text-base mb-4
-                        file:text-base
-                        file:text-center
-                        file:font-semibold
-                        file:text-dark
-                        file:py-2
-                        file:px-6
-                        file:md:px-8
-                        file:rounded-md
-                        file:hover:shadow-lg
-                        file:hover:bg-gray-100
-                        file:transition
-                        file:duration-300
-                        file:ease-in-out
-                        file:border-2
-                        file:bg-primary
-                        file:cursor-pointer"> -->
-                    
-                    <!-- <label class="block duration-300" for="file_input">
-                        <input class="block w-full font-montserrat text-sm text-gray-900 rounded-lg cursor-pointer bg-white focus:outline-none file:bg-primary file:hover:bg-primary file:focus:bg-primary duration-300" aria-describedby="file_input_help" id="file_input" type="file">
+                <div class="flex flex-col items-center justify-center w-full">
+                    <label for="dropzone-file" class="relative flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+                        <div id="tampilan-input-awal" class="opacity-100 flex flex-col items-center justify-center pt-5 pb-6">
+                            <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                            </svg>
+                            <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">PNG or JPG (MAX. 800x400px)</p>
+                        </div>
+                        <!-- <input id="dropzone-file" type="file" name="input-image" class="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer" /> -->
+                        <div id="tampilan-input-akhir" class="opacity-0 absolute top-0 left-0 flex items-center justify-center w-full h-full font-medium text-sm text-gray-400">
+                            {{ dropzone.create(action='upload') }}
+                            {{ dropzone.load_js() }}
+                            {{ dropzone.style('width: 100%; height: 100%; text-align:center; vertical-align: middle; border: none;') }}
+                        </div>
                     </label>
-                    <p class="mt-1 text-sm text-gray-500 text-start" id="file_input_help">PNG or JPG (MAX. 800x400px).</p> -->
-
-                    <button type="submit" class="text-base text-center font-semibold rounded-xl font-montserrat px-9 py-2 mt-4 md:mt-6 duration-300 text-text hover:text-white bg-primary opacity-90 hover:opacity-100 border-primary border-2 focus:ring-4 focus:outline-none focus:ring-primary">
-                        Load Data
-                    </button>
-                        
-                    <!-- <label class="block mb-2 text-sm font-medium font-montserrat text-gray-900 " for="file_input">Upload file</label> -->
-
-                </form>
+                    <form action="/result" method="POST">
+                        <input type="hidden" name="start-process-read" value="True">
+                        <button type="submit" class="text-base text-center font-semibold rounded-xl font-montserrat px-9 py-2 mt-4 md:mt-6 duration-300 text-text hover:text-white bg-primary opacity-90 hover:opacity-100 border-primary border-2 focus:ring-4 focus:outline-none focus:ring-primary">
+                            Process
+                        </button>
+                    </form>
+                </div>
             </div>
 
             <!-- Another Images -->
-            <div class="flex flex-row justify-between mt-5 mx-auto p-4 w-full max-w-sm border-2 border-red-500">
-                <p class="flex flex-col font-montserrat font-semibold text-sm md:text-base text-gray-500"> 
+            <div class="flex flex-row justify-between mt-5 mx-auto p-4 w-full max-w-sm">
+                <p class="flex flex-col font-montserrat font-semibold text-sm md:text-base text-gray-400"> 
                     <span>No image?</span>
                     <span>Try one of these:</span>
                 </p>
                 <div class="flex flex-row space-x-3">
                     <div class="w-[60px]">
-                        <img class="transition-all duration-300 rounded-lg" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/content/content-gallery-3.png" alt="image description">
+                        <img class="transition-all duration-300 rounded-lg cursor-pointer filter grayscale hover:grayscale-0" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/content/content-gallery-3.png" alt="image description">
                     </div>
                     <div class="w-[60px]">
-                        <img class="transition-all duration-300 rounded-lg" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/content/content-gallery-3.png" alt="image description">
+                        <img class="transition-all duration-300 rounded-lg cursor-pointer filter grayscale hover:grayscale-0" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/content/content-gallery-3.png" alt="image description">
                     </div>
                     <div class="w-[60px]">
-                        <img class="transition-all duration-300 rounded-lg" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/content/content-gallery-3.png" alt="image description">
+                        <img class="transition-all duration-300 rounded-lg cursor-pointer filter grayscale hover:grayscale-0" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/content/content-gallery-3.png" alt="image description">
                     </div>
                 </div>
             </div>
@@ -167,5 +139,35 @@
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.js"></script>
+    <script>
+        Dropzone.options.myDropzone = {
+            init: function() {
+                'upload'  // upload queue when button click
+            },
+            maxFiles : 1,
+            uploadMultiple : 0,
+            dictMaxFilesExceeded : "Maaf hanya bisa upload 1 file!"
+        }
+    </script>
+    <script>
+        Dropzone.options.myDropzone = {
+            init: function () {
+                this.on("addedfile", function (file) {
+                    // File berhasil diupload, tampilkan elemen dengan id "tampilan-awal"
+                    document.querySelector('#tampilan-input-awal').classList.replace('opacity-100', 'opacity-0')
+                    document.querySelector('#tampilan-input-akhir').classList.replace('opacity-0', 'opacity-100')
+                    console.log('Berhasil')
+                    
+                    // Remove previous files
+                    if (this.files.length > 1) {
+                        for (let i = 0; i < this.files.length - 1; i++) {
+                            this.removeFile(this.files[i]);
+                            console.log('Hapus previous')
+                        }
+                    }
+                });
+            }
+        };
+    </script>
 </body>
 </html>
