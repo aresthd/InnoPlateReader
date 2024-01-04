@@ -105,28 +105,28 @@
                 <div class="mx-auto my-4 md:my-6 lg:my-8 border border-purple-500">
                     <h3 class="text-xl md:text-2xl font-montserrat font-bold text-accent my-2">Original Image</h3>
                     <div class="max-w-md p-4 lg:p-5 mx-auto bg-white border border-green-500 rounded-lg shadow-lg">
-                        <img class="transition-all duration-300 rounded-lg" src="{{ filepath }}" alt="image description">
+                        <img class="transition-all duration-300 rounded-lg" src="{{ filepath }}" alt="Original Image">
                     </div>
                 </div>
                 <!-- Object Detection Image -->
                 <div class="mx-auto my-4 md:my-6 lg:my-8 border border-orange-500">
                     <h3 class="text-xl md:text-2xl font-montserrat font-bold text-accent my-2">Object Detection Image</h3>
                     <div class="max-w-md p-4 lg:p-5 mx-auto bg-white border border-green-500 rounded-lg shadow-lg">
-                        <img class="transition-all duration-300 rounded-lg" src="{{url_for('static',filename='dist/img/content-gallery-3.png')}}" alt="image description">
+                        <img class="transition-all duration-300 rounded-lg" src="{{ pathOB }}" alt="Object Detection Image">
                     </div>
                 </div>
                 <!-- Crop Object -->
                 <div class="mx-auto my-4 md:my-6 lg:my-8 border border-orange-500">
                     <h3 class="text-xl md:text-2xl font-montserrat font-bold text-accent my-2">Crop Object</h3>
                     <div class="max-w-md p-4 lg:p-5 mx-auto bg-white border border-green-500 rounded-lg shadow-lg">
-                        <img class="transition-all duration-300 rounded-lg" src="{{url_for('static',filename='dist/img/content-gallery-3.png')}}" alt="image description">
+                        <img class="transition-all duration-300 rounded-lg" src="{{ pathCrop }}" alt="Crop Object Image">
                     </div>
                 </div>
                 <!-- Text Detection Image -->
                 <div class="mx-auto my-4 md:my-6 lg:my-8 border border-orange-500">
                     <h3 class="text-xl md:text-2xl font-montserrat font-bold text-accent my-2">Text Detection Image</h3>
                     <div class="max-w-md p-4 lg:p-5 mx-auto bg-white border border-green-500 rounded-lg shadow-lg">
-                        <img class="transition-all duration-300 rounded-lg" src="{{url_for('static',filename='dist/img/content-gallery-3.png')}}" alt="image description">
+                        <img class="transition-all duration-300 rounded-lg" src="{{ pathTD }}" alt="Text Detection Image">
                     </div>
                 </div>
                 
@@ -137,7 +137,7 @@
                 <!-- Result -->
                 <div class="w-2/3 flex flex-row justify-between lg:mt-4 mx-auto p-4 bg-primary rounded-lg shadow hover:shadow-lg md:hover:shadow-xl hover:shadow-gray-300 hover:border-primary transition duration-300 ease-in-out md:hover:scale-125 text-text hover:text-white font-montserrat font-semibold">
                     <h3 class="text-base -mt-2 -ml-1">Result</h3>
-                    <p class="text-right text-xl lg:text-2xl -mb-2">AB2761HX</p>
+                    <p class="text-right text-xl lg:text-2xl -mb-2">{{ result_text_plate }}</p>
                 </div>
                 <!-- More -->
                 <div class="w-full mx-auto flex flex-col md:flex-row mt-2 md:mt-0 justify-center md:justify-around border border-orange-500">
