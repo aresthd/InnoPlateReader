@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, send_file
 from flask_dropzone import Dropzone
 from werkzeug.utils import secure_filename
 import os
@@ -12,7 +12,8 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
 app.secret_key = "secret key"
 app.config.update(
-    UPLOADED_FOLDER = os.path.join('static', 'uploads'),
+    UPLOADED_FOLDER_PREDICT = os.path.join('static', 'uploads'),
+    UPLOADED_FOLDER_TRAIN = os.path.join('static', 'images', 'train'),
     DROPZONE_TIMEOUT = 5 * 60 * 1000,
     DROPZONE_ADD_REMOVE_LINKS = True
 )
@@ -129,7 +130,7 @@ def login():
 def register():
     return render_template("register.html")
 
-@app.route("/read_plate")
+@app.route("/read-plate")
 def read_plate():
     # dropzone.config['MAX_FILES'] = 1
     # dropzone.config['DROPZONE_MAX_FILES'] = 1
@@ -149,7 +150,7 @@ def upload():
         if f and allowed_file(f.filename):
             print('\n Proses dimulai...\n')
             filename = secure_filename(f.filename)
-            filepath = os.path.join(app.config['UPLOADED_FOLDER'], filename)
+            filepath = os.path.join(app.config['UPLOADED_FOLDER_PREDICT'], filename)
             set_filepath_original(filepath, filename)
             print('\n Path berhasil diubah...\n')
             f.save(filepath)
@@ -160,9 +161,9 @@ def upload():
             print(filename)
             print('\n\n')
             # flash('File successfully uploaded')
-            return redirect("/read_plate")
+            return redirect("/read-plate")
     else:
-        return redirect("/read_plate")
+        return redirect("/read-plate")
     
 @app.route("/result", methods=['GET', 'POST'])
 def result():
@@ -179,7 +180,63 @@ def result():
         return render_template('result.html', filepath=filepath, filename=filename, pathOB=pathOB, pathCrop=pathCrop, pathTD=pathTD, result_text_plate=result_text_plate, start_process_read=start_process_read)
     else:
         print('\n\n Mengembalikkan ke halaman read_plate....\n')
-        return redirect('/read_plate')
+        return redirect('/read-plate')
+    
+@app.route("/download-result")
+def download_result():
+    print('\n--------------')
+    print('\n\n Mengakses /download-result....\n')
+    filepath, filename = get_filepath_original()
+    if filepath != None:
+        pathOB, pathCrop, pathTD = get_filepath_result()
+        filename = 'Result_' + filename
+        return send_file(
+            pathTD,
+            download_name=filename,
+            as_attachment=True,
+        )
+    else:
+        print('\n\n Mengembalikkan ke halaman read_plate....\n')
+        return redirect('/read-plate')
+    
+@app.route("/read-again")
+def read_again():
+    set_filepath_none()
+    return redirect('/read-plate')
+
+@app.route("/upgrade-model")
+def upgrade_model():
+    # dropzone.config['MAX_FILES'] = 1
+    # dropzone.config['DROPZONE_MAX_FILES'] = 1
+    filepath, filename = get_filepath_original()
+    if filepath != None:
+        print('\n Mengakses upgrade_model dengan filepath...\n')
+        print(f'\n filepath : {filepath}...\n')
+        return render_template("upgrade_model.html", filepath=filepath, filename=filename)
+    else:
+        print('\n Mengakses upgrade_model langsung...\n')
+        return render_template("upgrade_model.html")
+    
+@app.route("/upload-train", methods=['GET', 'POST'])
+def upload_train():
+    if request.method == 'POST':
+        f = request.files.get('file')
+        if f and allowed_file(f.filename):
+            print('\n Proses dimulai...\n')
+            filename = secure_filename(f.filename)
+            filepath = os.path.join(app.config['UPLOADED_FOLDER_TRAIN'], filename)
+            f.save(filepath)
+            print('\n File berhasil disimpan...\n')
+            print('\n--------------')
+            # print(UPLOAD_FOLDER)
+            print(filepath)
+            print(filename)
+            print('\n\n')
+            # flash('File successfully uploaded')
+            return redirect("/upgrade-model")
+    else:
+        return redirect("/upgrade-model")
+
 
 # @app.route("/result", methods=['GET', 'POST'])
 # def result():
@@ -198,7 +255,7 @@ def result():
 #                 # flash('File successfully uploaded')
 #                 return render_template("result.html", filename = filename, filepath=filepath)
 #     else:
-#         return redirect("/read_plate")
+#         return redirect("/read-plate")
 
 if __name__ == '__main__':
     app.run(debug=True)

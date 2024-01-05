@@ -3,5 +3,5 @@
 /tensorflow
 /run
 /runs
-/model
 /node_modules
+/base_model
