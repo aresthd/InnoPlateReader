@@ -1,0 +1,7 @@
+path: D:/Coding/Projects/New folder/number-plate-recognition/static   # datset root dir
+train: images/train     # train images (relatives to 'path')
+val: images/train     # test images (relatives to 'path')
+
+# Classes
+names: 
+  0: plat-nomor

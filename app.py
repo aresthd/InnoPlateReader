@@ -6,6 +6,8 @@ import cv2
 import imutils
 import easyocr
 from ultralytics import YOLO
+from datetime import datetime
+
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -31,12 +33,51 @@ FILEPATH_PREDICT = {
     'text_detection' : None
 }
 
-MODEL_YOLO = "D:/Coding/Projects/number-plate-recognition/model/best.onnx"
+FILEPATH_TRAIN = {
+    'result' : None,
+    'val' : None,
+    'plot' : None,
+    'model' : None
+}
+
+MODEL_YOLO = "D:/Coding/Projects/number-plate-recognition/model/best.pt"
+CONFIG = "D:/Coding/Projects/New folder/number-plate-recognition/static/config.yaml"
 
 
 # Load a model
 model = YOLO(MODEL_YOLO)
 
+# Train
+def train(epoch, confidence):
+    global model
+    basedirTraining = os.path.join('static', 'training')
+    date = f'{str(datetime.now().day)}_{str(datetime.now().month)}_{str(datetime.now().year)}'
+    time = f'{str(datetime.now().hour)}_{str(datetime.now().minute)}_{str(datetime.now().second)}'
+    name = f'{date}_{time}'
+    
+    result = model.train(data=CONFIG, epochs=epoch, project=basedirTraining, name=name)
+    metrics = model.val(conf=confidence)
+    
+    pathPlot = "static/dist/img"
+    metrics.confusion_matrix.plot(normalize=False, save_dir=pathPlot)
+    
+    pathResult = result.save_dir
+    pathVal = metrics.save_dir
+    pathPlot = os.path.join(pathPlot, "confusion_matrix.png")
+    pathModel = os.path.join(pathResult, 'weights', 'best.pt')
+    set_path_train(pathResult, pathVal, pathPlot, pathModel)
+    
+    cf = metrics.confusion_matrix.matrix
+    tp = cf[0][0]
+    fp = cf[0][1]
+    fn = cf[1][0]
+    tn = cf[1][1]
+    accuracy = (tp + tn) / (tp+fp+fn+tn)
+    precision = tp / (tp+fp)
+    recall = tp /(tp+fn)
+    
+    return model, accuracy, precision, recall
+    
 # Predict
 def predict(path_image, filename):
     basedirPredict = 'static\images\predict'
@@ -117,6 +158,13 @@ def get_filepath_result():
     global FILEPATH_PREDICT
     return FILEPATH_PREDICT['object_detection'], FILEPATH_PREDICT['crop_object'], FILEPATH_PREDICT['text_detection']
 
+def set_path_train(pathRes, pathVal, pathPlot, pathModel):
+    global FILEPATH_TRAIN
+    FILEPATH_TRAIN['result'] = pathRes
+    FILEPATH_TRAIN['val'] = pathVal
+    FILEPATH_TRAIN['plot'] = pathPlot
+    FILEPATH_TRAIN['model'] = pathModel
+
 @app.route("/")
 @app.route("/index")
 def index():
@@ -194,7 +242,7 @@ def download_result():
             pathTD,
             download_name=filename,
             as_attachment=True,
-        )
+        )   
     else:
         print('\n\n Mengembalikkan ke halaman read_plate....\n')
         return redirect('/read-plate')
@@ -237,6 +285,25 @@ def upload_train():
     else:
         return redirect("/upgrade-model")
 
+@app.route("/train-model", methods=['GET', 'POST'])
+def train_model():
+    print('\n--------------')
+    print('\n\n Mengakses /train....\n')
+    if request.form['start-train'] == 'True':
+        epoch = request.form['epoch']
+        confidence = request.form['confidence']
+        print('\n\n Start Train Data....\n')
+        model, accuracy, precision, recall = train(epoch, confidence)
+        
+        
+        return redirect('/')
+    elif request.form['start-train'] == 'False':
+        print('\n\n Mengembalikkan ke halaman upgrade model....\n')
+        return redirect('/upgrade-model')
+    else:
+        print('\n\n Mengembalikkan ke halaman upgrade model....\n')
+        return redirect('/upgrade-model')
+        
 
 # @app.route("/result", methods=['GET', 'POST'])
 # def result():
