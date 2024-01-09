@@ -26,22 +26,25 @@ dropzone = Dropzone(app)
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'txt'])
 # app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-CONFIG_PREDICT = {
+FILEPATH_PREDICT = {
     'filename' : None,
-    'path_ori' : None,
-    'path_ob' : None,
-    'path_crop' : None,
-    'path_td' : None
+    'original' : None,
+    'object_detection' : None,
+    'crop_object' : None,
+    'text_detection' : None
 }
 
-CONFIG_TRAIN = {
+FILEPATH_TRAIN = {
     'status' : None,
+    'result' : None,
+    'val' : None,
+    'plot' : None,
+    'model' : None
+}
+
+RESULT_TRAIN = {
     'model_name' : None,
     'model' : None,
-    'path_model' : None,
-    'path_run' : None,
-    'path_val' : None,
-    'path_plot' : None,
     'accuracy' : None, 
     'precision' : None, 
     'recall' : None
@@ -70,10 +73,11 @@ def train(epoch, confidence):
     pathPlot = "static/dist/img"
     metrics.confusion_matrix.plot(normalize=False, save_dir=pathPlot)
     
-    pathRun = result.save_dir
+    pathResult = result.save_dir
     pathVal = metrics.save_dir
     pathPlot = os.path.join(pathPlot, "confusion_matrix.png")
-    pathModel = os.path.join(pathRun, 'weights', 'best.pt')
+    pathModel = os.path.join(pathResult, 'weights', 'best.pt')
+    set_path_train(pathResult, pathVal, pathPlot, pathModel)
     
     cf = metrics.confusion_matrix.matrix
     tp = cf[0][0]
@@ -83,8 +87,8 @@ def train(epoch, confidence):
     accuracy = ((tp + tn) / (tp+fp+fn+tn)) * 100
     precision = (tp / (tp+fp)) * 100
     recall = (tp /(tp+fn)) * 100
+    set_res_train(name, model, accuracy, precision, recall)
     
-    set_all_conf_train('done', name, model, pathModel, pathRun, pathVal, pathPlot, accuracy, precision, recall)
     return model, accuracy, precision, recall
     
 # Predict
@@ -133,7 +137,7 @@ def predict(path_image, filename):
     pathImgTD = os.path.join(basedirPredict, 'TD_' + filename)
     cv2.imwrite(pathImgTD, imgDrawText)
     
-    set_all_conf_predict(filename, path_image, pathImgOb, pathImgCrop, pathImgTD)
+    set_path_predict_result(pathImgOb, pathImgCrop, pathImgTD)
     return textToWrite
 
 def allowed_file(filename):
@@ -147,43 +151,66 @@ def get_file_extension(file_name):
     except IndexError:
         return None
 
-def set_all_conf_predict(filename=None, path_ori=None, path_ob=None, path_crop=None, path_td=None):
-    global CONFIG_PREDICT
-    CONFIG_PREDICT['filename'] = filename
-    CONFIG_PREDICT['path_ori'] = path_ori
-    CONFIG_PREDICT['path_ob'] = path_ob
-    CONFIG_PREDICT['path_crop'] = path_crop
-    CONFIG_PREDICT['path_td'] = path_td
+def set_path_none():
+    global FILEPATH_PREDICT
+    FILEPATH_PREDICT['filename'] = None
+    FILEPATH_PREDICT['original'] = None
+    FILEPATH_PREDICT['object_detection'] = None
+    FILEPATH_PREDICT['crop_object'] = None
+    FILEPATH_PREDICT['text_detection'] = None
 
-def set_all_conf_train(status=None, model_name=None, model=None, path_model=None, path_run=None, path_val=None, path_plot=None, accuracy=None,  precision=None,  recall=None):
-    global CONFIG_TRAIN
-    CONFIG_TRAIN['status'] = status
-    CONFIG_TRAIN['model_name'] = model_name
-    CONFIG_TRAIN['model'] = model
-    CONFIG_TRAIN['path_model'] = path_model
-    CONFIG_TRAIN['path_run'] = path_run
-    CONFIG_TRAIN['path_val'] = path_val
-    CONFIG_TRAIN['path_plot'] = path_plot
-    CONFIG_TRAIN['accuracy' ] = accuracy
-    CONFIG_TRAIN['precision' ] = precision
-    CONFIG_TRAIN['recall'] = recall
+def set_path_predict_original(path, filename):
+    global FILEPATH_PREDICT
+    FILEPATH_PREDICT['filename'] = filename
+    FILEPATH_PREDICT['original'] = path
+           
+def get_path_predict_original():
+    global FILEPATH_PREDICT
+    return FILEPATH_PREDICT['original'], FILEPATH_PREDICT['filename']
 
-def set_conf_predict(keyword, value):
-    global CONFIG_PREDICT
-    CONFIG_PREDICT[keyword] = value
+def set_path_predict_result(pathOB, pathCrop, pathTD):
+    global FILEPATH_PREDICT
+    FILEPATH_PREDICT['object_detection'] = pathOB
+    FILEPATH_PREDICT['crop_object'] = pathCrop
+    FILEPATH_PREDICT['text_detection'] = pathTD
+    
+def get_path_predict_result():
+    global FILEPATH_PREDICT
+    return FILEPATH_PREDICT['object_detection'], FILEPATH_PREDICT['crop_object'], FILEPATH_PREDICT['text_detection']
 
-def set_conf_train(keyword, value):
-    global CONFIG_TRAIN
-    CONFIG_TRAIN[keyword] = value
+def set_path_train(pathRes, pathVal, pathPlot, pathModel):
+    global FILEPATH_TRAIN
+    FILEPATH_TRAIN['result'] = pathRes
+    FILEPATH_TRAIN['val'] = pathVal
+    FILEPATH_TRAIN['plot'] = pathPlot
+    FILEPATH_TRAIN['model'] = pathModel
+    
+def set_path_train_status(status):
+    FILEPATH_TRAIN['status'] = status
+    
+def get_path_train_status():
+    return FILEPATH_TRAIN['status']
 
-def get_conf_predict(keyword):
-    global CONFIG_PREDICT
-    return CONFIG_PREDICT[keyword]
+def set_res_train(model_name, model, accuracy, precision, recall):
+    global RESULT_TRAIN
+    RESULT_TRAIN['model_name'] = model_name + '.pt'
+    RESULT_TRAIN['model'] = model
+    RESULT_TRAIN['accuracy'] = accuracy
+    RESULT_TRAIN['precision'] = precision
+    RESULT_TRAIN['recall'] = recall
 
-def get_conf_train(keyword):
-    global CONFIG_TRAIN
-    return CONFIG_TRAIN[keyword]
+def get_path_train_plot():
+    global FILEPATH_TRAIN
+    return FILEPATH_TRAIN['plot']
 
+def get_train_model():
+    global RESULT_TRAIN
+    global FILEPATH_TRAIN
+    return RESULT_TRAIN['model_name'], FILEPATH_TRAIN['model']
+
+def get_res_train_acc():
+    global RESULT_TRAIN
+    return RESULT_TRAIN['accuracy']
 
 @app.route("/")
 @app.route("/index")
@@ -200,12 +227,18 @@ def register():
 
 @app.route("/read-plate")
 def read_plate():
-    filepath = get_conf_predict('path_ori')
-    filename = get_conf_predict('filename')
+    # dropzone.config['MAX_FILES'] = 1
+    # dropzone.config['DROPZONE_MAX_FILES'] = 1
+    filepath, filename = get_path_predict_original()
     if filepath != None:
         print('\n Mengakses read plate dengan filepath...\n')
         print(f'\n filepath : {filepath}...\n')
         return render_template("read_plate.html", filepath=filepath, filename=filename)
+    # elif filepath == 'error' and filename == 'error':
+    #     print('\n Silahkan upload file jpg...\n')
+    #     flash('Please upload images in JPG or PNG format!', 'error')
+    #     set_path_none()
+    #     return redirect("/read-plate")
     else:
         print('\n Mengakses read plate langsung...\n')
         return render_template("read_plate.html")
@@ -221,56 +254,59 @@ def upload():
             if ext != "txt":
                 print('\n Proses dimulai...\n')
                 filepath = os.path.join(app.config['UPLOADED_FOLDER_PREDICT'], filename)
-                set_all_conf_predict(filename=filename, path_ori=filepath)
+                set_path_predict_original(filepath, filename)
                 print('\n Path berhasil diubah...\n')
                 f.save(filepath)
                 print('\n File berhasil disimpan...\n')
                 print('\n--------------')
+                # print(UPLOAD_FOLDER)
                 print(filepath)
                 print(filename)
                 print('\n\n')
+                # flash('File successfully uploaded')
                 return redirect("/read-plate")
             else:
                 print('\n FIle bukan PNG / JPG...\n')
-                set_all_conf_predict(filename='error', path_ori='error')
+                set_path_predict_original('error', 'error')
+                # flash('Please upload images in JPG or PNG format!', 'error')
                 return redirect("/read-plate")
         else:
             print('\n FIle sembarangan...\n')
-            set_all_conf_predict(filename='error', path_ori='error')
+            set_path_predict_original('error', 'error')
+            # flash('Please upload images in JPG or PNG format!', 'error')
             return redirect("/read-plate")
     else:
         return redirect("/read-plate")
-
-# Result Predict
+    
 @app.route("/result", methods=['GET', 'POST'])
 def result():
     print('\n--------------')
     print('\n\n Mengakses /result....\n')
-    filepath, filename = get_conf_predict('path_ori'), get_conf_predict('filename')
+    filepath, filename = get_path_predict_original()
     if filepath != None and filepath != 'error' and filename != 'error' and request.form['start-process-read']:
         print('\n\nStart Process Data....\n')
         start_process_read = request.form['start-process-read']
         print(f'\n filepath : {filepath}...\n')
         print(f'\n Start Predict Image...\n')
         result_text_plate = predict(filepath, filename)
-        pathOB, pathCrop, pathTD = get_conf_predict('path_ob'), get_conf_predict('path_crop'), get_conf_predict('path_td')
+        pathOB, pathCrop, pathTD = get_path_predict_result()
         return render_template('result.html', filepath=filepath, filename=filename, pathOB=pathOB, pathCrop=pathCrop, pathTD=pathTD, result_text_plate=result_text_plate, start_process_read=start_process_read)
     elif filepath == 'error' and filename == 'error' and request.form['start-process-read']:
         print('\n Silahkan upload file jpg...\n')
-        set_all_conf_predict()
+        set_path_none()
         flash('Please upload images in JPG or PNG format!', 'error')
         return redirect("/read-plate")
     else:
         print('\n\n Mengembalikkan ke halaman read_plate....\n')
         return redirect('/read-plate')
-
+    
 @app.route("/download-result")
 def download_result():
     print('\n--------------')
     print('\n\n Mengakses /download-result....\n')
-    filepath, filename = get_conf_predict('path_ori'), get_conf_predict('filename')
+    filepath, filename = get_path_predict_original()
     if filepath != None:
-        pathTD = get_conf_predict('path_td')
+        pathOB, pathCrop, pathTD = get_path_predict_result()
         filename = 'Result_' + filename
         return send_file(
             pathTD,
@@ -283,12 +319,21 @@ def download_result():
     
 @app.route("/read-again")
 def read_again():
-    set_all_conf_predict()
+    set_path_none()
     return redirect('/read-plate')
 
 @app.route("/upgrade-model")
 def upgrade_model():
-    return render_template("upgrade_model.html")
+    # dropzone.config['MAX_FILES'] = 1
+    # dropzone.config['DROPZONE_MAX_FILES'] = 1
+    filepath, filename = get_path_predict_original()
+    if filepath != None:
+        print('\n Mengakses upgrade_model dengan filepath...\n')
+        print(f'\n filepath : {filepath}...\n')
+        return render_template("upgrade_model.html", filepath=filepath, filename=filename)
+    else:
+        print('\n Mengakses upgrade_model langsung...\n')
+        return render_template("upgrade_model.html")
     
 @app.route("/upload-train", methods=['GET', 'POST'])
 def upload_train():
@@ -309,15 +354,17 @@ def upload_train():
                 filepath = os.path.join(app.config['UPLOADED_FOLDER_TRAIN_IMG'], filename)
                 f.save(filepath)
             print('\n File berhasil disimpan...\n')
-            set_conf_train('status', 'start')
+            set_path_train_status('start')
             print('\n--------------')
+            # print(UPLOAD_FOLDER)
             print(filepath)
             print(filename)
             print('\n\n')
+            # flash('File successfully uploaded')
             return redirect("/upgrade-model")
         else: 
-            print('\n File sembarangan...\n')
-            set_conf_train('status', 'cancel')
+            print('\n File bukan sembarangan...\n')
+            set_path_train_status('cancel')
             return redirect("/upgrade-model")
     else:
         return redirect("/upgrade-model")
@@ -326,29 +373,29 @@ def upload_train():
 def train_model():
     print('\n--------------')
     print('\n\n Mengakses /train....\n')
-    status = get_conf_train('status')
-    if status != None and request.form['start-train'] == 'True':
-        if status == 'start':
-            epoch = int(request.form['epoch'])
-            confidence = int(request.form['confidence'])
-            print('\n\n Start Train Data....\n')
-            model, accuracy, precision, recall = train(epoch, confidence)
-            plotTrain = get_conf_train('path_plot')
-            return render_template('score.html', model=model, accuracy=accuracy, precision=precision, recall=recall, plotTrain=plotTrain)
-        else:
-            flash('Please upload the images (png or jpg) and labels (txt)!', 'error')
-            return redirect("/upgrade-model")
+    if request.form['start-train'] == 'True':
+        epoch = int(request.form['epoch'])
+        confidence = int(request.form['confidence'])
+        print('\n\n Start Train Data....\n')
+        model, accuracy, precision, recall = train(epoch, confidence)
+        plotTrain = get_path_train_plot()
+        return render_template('score.html', model=model, accuracy=accuracy, precision=precision, recall=recall, plotTrain=plotTrain)
+    elif request.form['start-train'] == 'False':
+        print('\n\n Mengembalikkan ke halaman upgrade model....\n')
+        return redirect('/upgrade-model')
     else:
         print('\n\n Mengembalikkan ke halaman upgrade model....\n')
         return redirect('/upgrade-model')
 
+    
 @app.route("/save-model")
 def save_model():
     print('\n--------------')
     print('\n\n Mengakses /save-model....\n')
-    modelName, pathModel = get_conf_train('model_name'), get_conf_train('path_model')
+    modelName, pathModel = get_train_model()
     if pathModel != None:
-        modelName = 'Model_' + modelName + '.pt'
+        modelName = 'Model_' + modelName
+        print(f'\n\n pathModel: {pathModel}\n----')
         return send_file(
             pathModel,
             download_name=modelName,
@@ -358,6 +405,12 @@ def save_model():
         print('\n\n Mengembalikkan ke halaman upgrade model....\n')
         return redirect('/score')
 
+# @app.route("/score")
+# def score():
+#     accuracy = get_res_train_acc()
+#     plotTrain = get_path_train_plot()
+#     return render_template('score.html', accuracy=accuracy, plotTrain=plotTrain)
+
 @app.route("/score")
 def score():
     return render_template('score.html')
@@ -366,6 +419,24 @@ def score():
 def res():
     return render_template('result.html')
 
+# @app.route("/result", methods=['GET', 'POST'])
+# def result():
+#     if request.method == 'POST':
+#         if request.files['input-image']:
+#             file = request.files['input-image']
+#             if file and allowed_file(file.filename):
+#                 filename = secure_filename(file.filename)
+#                 filepath = os.path.join("static", "upload", filename)
+#                 file.save(filepath)
+#                 print('\n--------------')
+#                 # print(UPLOAD_FOLDER)
+#                 print(filepath)
+#                 print(filename)
+#                 print('\n\n')
+#                 # flash('File successfully uploaded')
+#                 return render_template("result.html", filename = filename, filepath=filepath)
+#     else:
+#         return redirect("/read-plate")
 
 if __name__ == '__main__':
     app.run(debug=True)
