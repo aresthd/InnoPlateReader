@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, send_file
+from flask import Flask, render_template, request, redirect, url_for, send_file, flash
 from flask_dropzone import Dropzone
 from werkzeug.utils import secure_filename
 import os
@@ -35,6 +35,7 @@ FILEPATH_PREDICT = {
 }
 
 FILEPATH_TRAIN = {
+    'status' : None,
     'result' : None,
     'val' : None,
     'plot' : None,
@@ -183,6 +184,12 @@ def set_path_train(pathRes, pathVal, pathPlot, pathModel):
     FILEPATH_TRAIN['val'] = pathVal
     FILEPATH_TRAIN['plot'] = pathPlot
     FILEPATH_TRAIN['model'] = pathModel
+    
+def set_path_train_status(status):
+    FILEPATH_TRAIN['status'] = status
+    
+def get_path_train_status():
+    return FILEPATH_TRAIN['status']
 
 def set_res_train(model_name, model, accuracy, precision, recall):
     global RESULT_TRAIN
@@ -227,6 +234,11 @@ def read_plate():
         print('\n Mengakses read plate dengan filepath...\n')
         print(f'\n filepath : {filepath}...\n')
         return render_template("read_plate.html", filepath=filepath, filename=filename)
+    # elif filepath == 'error' and filename == 'error':
+    #     print('\n Silahkan upload file jpg...\n')
+    #     flash('Please upload images in JPG or PNG format!', 'error')
+    #     set_path_none()
+    #     return redirect("/read-plate")
     else:
         print('\n Mengakses read plate langsung...\n')
         return render_template("read_plate.html")
@@ -253,6 +265,15 @@ def upload():
                 print('\n\n')
                 # flash('File successfully uploaded')
                 return redirect("/read-plate")
+            else:
+                print('\n FIle bukan PNG / JPG...\n')
+                set_path_predict_original('error', 'error')
+                # flash('Please upload images in JPG or PNG format!', 'error')
+                return redirect("/read-plate")
+        else:
+            print('\n FIle sembarangan...\n')
+            set_path_predict_original('error', 'error')
+            # flash('Please upload images in JPG or PNG format!', 'error')
             return redirect("/read-plate")
     else:
         return redirect("/read-plate")
@@ -262,7 +283,7 @@ def result():
     print('\n--------------')
     print('\n\n Mengakses /result....\n')
     filepath, filename = get_path_predict_original()
-    if filepath != None and request.form['start-process-read']:
+    if filepath != None and filepath != 'error' and filename != 'error' and request.form['start-process-read']:
         print('\n\nStart Process Data....\n')
         start_process_read = request.form['start-process-read']
         print(f'\n filepath : {filepath}...\n')
@@ -270,6 +291,11 @@ def result():
         result_text_plate = predict(filepath, filename)
         pathOB, pathCrop, pathTD = get_path_predict_result()
         return render_template('result.html', filepath=filepath, filename=filename, pathOB=pathOB, pathCrop=pathCrop, pathTD=pathTD, result_text_plate=result_text_plate, start_process_read=start_process_read)
+    elif filepath == 'error' and filename == 'error' and request.form['start-process-read']:
+        print('\n Silahkan upload file jpg...\n')
+        set_path_none()
+        flash('Please upload images in JPG or PNG format!', 'error')
+        return redirect("/read-plate")
     else:
         print('\n\n Mengembalikkan ke halaman read_plate....\n')
         return redirect('/read-plate')
@@ -314,7 +340,7 @@ def upload_train():
     if request.method == 'POST':
         f = request.files.get('file')
         filename = secure_filename(f.filename)
-        if f and allowed_file(filename):
+        if allowed_file(filename):
             print('\n Mengecek ekstensi file...\n')
             ext = get_file_extension(filename)
             if ext == "txt":
@@ -328,12 +354,17 @@ def upload_train():
                 filepath = os.path.join(app.config['UPLOADED_FOLDER_TRAIN_IMG'], filename)
                 f.save(filepath)
             print('\n File berhasil disimpan...\n')
+            set_path_train_status('start')
             print('\n--------------')
             # print(UPLOAD_FOLDER)
             print(filepath)
             print(filename)
             print('\n\n')
             # flash('File successfully uploaded')
+            return redirect("/upgrade-model")
+        else: 
+            print('\n File bukan sembarangan...\n')
+            set_path_train_status('cancel')
             return redirect("/upgrade-model")
     else:
         return redirect("/upgrade-model")
@@ -373,11 +404,19 @@ def save_model():
         print('\n\n Mengembalikkan ke halaman upgrade model....\n')
         return redirect('/score')
 
+# @app.route("/score")
+# def score():
+#     accuracy = get_res_train_acc()
+#     plotTrain = get_path_train_plot()
+#     return render_template('score.html', accuracy=accuracy, plotTrain=plotTrain)
+
 @app.route("/score")
 def score():
-    accuracy = get_res_train_acc()
-    plotTrain = get_path_train_plot()
-    return render_template('score.html', accuracy=accuracy, plotTrain=plotTrain)
+    return render_template('score.html')
+
+@app.route("/res")
+def res():
+    return render_template('result.html')
 
 # @app.route("/result", methods=['GET', 'POST'])
 # def result():
