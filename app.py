@@ -251,21 +251,46 @@ def upload():
     else:
         return redirect("/read-plate")
 
+# Example Images
+@app.route("/example-1", methods=['GET', 'POST'])
+def example_1():
+    filename = 'K2_AB4480UP.jpg'
+    filepath = os.path.join('static', 'images', 'example', filename)
+    set_conf_predict('filename', filename)
+    set_conf_predict('path_ori', filepath)
+    return redirect('/result')
+
+@app.route("/example-2", methods=['GET', 'POST'])
+def example_2():
+    filename = 'K3_AB1510BA.jpg'
+    filepath = os.path.join('static', 'images', 'example', filename)
+    set_conf_predict('filename', filename)
+    set_conf_predict('path_ori', filepath)
+    return redirect('/result')
+
+@app.route("/example-3", methods=['GET', 'POST'])
+def example_3():
+    filename = 'K4_H1753FO.jpg'
+    filepath = os.path.join('static', 'images', 'example', filename)
+    set_conf_predict('filename', filename)
+    set_conf_predict('path_ori', filepath)
+    return redirect('/result')
+    
 # Result Predict
 @app.route("/result", methods=['GET', 'POST'])
 def result():
     print('\n--------------')
     print('\n\n Mengakses /result....\n')
     filepath, filename = get_conf_predict('path_ori'), get_conf_predict('filename')
-    if filepath != None and filepath != 'error' and filename != 'error' and request.form['start-process-read']:
+    if filepath != None and filepath != 'error' and filename != 'error':
         print('\n\nStart Process Data....\n')
-        start_process_read = request.form['start-process-read']
+        # start_process_read = request.form['start-process-read']
         print(f'\n filepath : {filepath}...\n')
         print(f'\n Start Predict Image...\n')
         result_text_plate = predict(filepath, filename)
         pathOB, pathCrop, pathTD = get_conf_predict('path_ob'), get_conf_predict('path_crop'), get_conf_predict('path_td')
-        return render_template('result.html', filepath=filepath, filename=filename, pathOB=pathOB, pathCrop=pathCrop, pathTD=pathTD, result_text_plate=result_text_plate, start_process_read=start_process_read)
-    elif filepath == 'error' and filename == 'error' and request.form['start-process-read']:
+        return render_template('result.html', filepath=filepath, filename=filename, pathOB=pathOB, pathCrop=pathCrop, pathTD=pathTD, result_text_plate=result_text_plate)
+    elif filepath == 'error' and filename == 'error':
         print('\n Silahkan upload file jpg...\n')
         set_all_conf_predict()
         flash('Please upload images in JPG or PNG format!', 'error')

@@ -146,15 +146,15 @@
                     <span>Try one of these:</span>
                 </p>
                 <div class="flex flex-row space-x-3">
-                    <div class="w-[60px]">
-                        <img class="transition-all duration-300 rounded-lg cursor-pointer filter grayscale hover:grayscale-0" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/content/content-gallery-3.png" alt="image description">
-                    </div>
-                    <div class="w-[60px]">
-                        <img class="transition-all duration-300 rounded-lg cursor-pointer filter grayscale hover:grayscale-0" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/content/content-gallery-3.png" alt="image description">
-                    </div>
-                    <div class="w-[60px]">
-                        <img class="transition-all duration-300 rounded-lg cursor-pointer filter grayscale hover:grayscale-0" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/content/content-gallery-3.png" alt="image description">
-                    </div>
+                    <a href="/example-1" class="w-[60px] h-[100px]">
+                        <img class="transition-all duration-300 rounded-lg cursor-pointer filter grayscale hover:grayscale-0" src="{{ url_for('static',filename='images/example/K2_AB4480UP.jpg') }}" alt="Example 1">
+                    </a>
+                    <a href="/example-2" class="w-[60px] h-[100px]">
+                        <img class="transition-all duration-300 rounded-lg cursor-pointer filter grayscale hover:grayscale-0" src="{{ url_for('static',filename='images/example/K3_AB1510BA.jpg') }}" alt="Example 2">
+                    </a>
+                    <a href="/example-3" class="w-[60px] h-[100px]">
+                        <img class="transition-all duration-300 rounded-lg cursor-pointer filter grayscale hover:grayscale-0" src="{{ url_for('static',filename='images/example/K4_H1753FO.jpg') }}" alt="Example 3">
+                    </a>
                 </div>
             </div>
         </div>

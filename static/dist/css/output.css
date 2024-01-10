@@ -1383,6 +1383,14 @@ input:checked + .toggle-bg{
   height: 100vh;
 }
 
+.h-\[\]{
+  height: ;
+}
+
+.h-\[100px\]{
+  height: 100px;
+}
+
 .min-h-fit{
   min-height: -moz-fit-content;
   min-height: fit-content;
