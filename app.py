@@ -65,27 +65,37 @@ def train(epoch, confidence):
     name = f'{date}_{time}'
     
     result = model.train(data=CONFIG, epochs=epoch, project=basedirTraining, name=name)
-    metrics = model.val(conf=confidence)
+    try:
+        print(result)
+        metrics = model.val(conf=confidence)
+        # pathPlot = "static/dist/img"
+        # metrics.confusion_matrix.plot(normalize=False, save_dir=pathPlot)
+        
+        pathRun = result.save_dir
+        pathVal = metrics.save_dir
+        pathPlot = os.path.join(pathRun, "confusion_matrix.png")
+        print(f'\n\n pathRun: {pathRun}\n')
+        print(f'\n\n pathPlot: {pathPlot}\n')
+        pathModel = os.path.join(pathRun, 'weights', 'best.pt')
+        
+        cf = metrics.confusion_matrix.matrix
+        tp = cf[0][0]
+        fp = cf[0][1]
+        fn = cf[1][0]
+        tn = cf[1][1]
+        accuracy = ((tp + tn) / (tp+fp+fn+tn)) * 100
+        precision = (tp / (tp+fp)) * 100
+        recall = (tp /(tp+fn)) * 100
+        
+        set_all_conf_train('success', name, model, pathModel, pathRun, pathVal, pathPlot, accuracy, precision, recall)
+        return model, accuracy, precision, recall
     
-    pathPlot = "static/dist/img"
-    metrics.confusion_matrix.plot(normalize=False, save_dir=pathPlot)
-    
-    pathRun = result.save_dir
-    pathVal = metrics.save_dir
-    pathPlot = os.path.join(pathPlot, "confusion_matrix.png")
-    pathModel = os.path.join(pathRun, 'weights', 'best.pt')
-    
-    cf = metrics.confusion_matrix.matrix
-    tp = cf[0][0]
-    fp = cf[0][1]
-    fn = cf[1][0]
-    tn = cf[1][1]
-    accuracy = ((tp + tn) / (tp+fp+fn+tn)) * 100
-    precision = (tp / (tp+fp)) * 100
-    recall = (tp /(tp+fn)) * 100
-    
-    set_all_conf_train('done', name, model, pathModel, pathRun, pathVal, pathPlot, accuracy, precision, recall)
-    return model, accuracy, precision, recall
+    except AttributeError as ae:
+        accuracy = 0
+        precision = 0
+        recall = 0
+        set_conf_train('status', 'no label')
+        return model, accuracy, precision, recall
     
 # Predict
 def predict(path_image, filename):
@@ -327,19 +337,30 @@ def train_model():
     print('\n--------------')
     print('\n\n Mengakses /train....\n')
     status = get_conf_train('status')
+    print(f'\n Status : {status}....\n')
     if status != None and request.form['start-train'] == 'True':
         if status == 'start':
             epoch = int(request.form['epoch'])
             confidence = int(request.form['confidence'])
             print('\n\n Start Train Data....\n')
             model, accuracy, precision, recall = train(epoch, confidence)
-            plotTrain = get_conf_train('path_plot')
-            return render_template('score.html', model=model, accuracy=accuracy, precision=precision, recall=recall, plotTrain=plotTrain)
+            status = get_conf_train('status')
+            if status == 'success':
+                plotTrain = get_conf_train('path_plot')
+                set_conf_train('status', 'done')
+                return render_template('score.html', model=model, accuracy=accuracy, precision=precision, recall=recall, plotTrain=plotTrain)
+            elif status == 'no label':
+                flash('Please upload the labels too!', 'error')
+                return redirect("/upgrade-model")
+        elif status == 'done':
+            flash('Please upload the images and labels again!', 'error')
+            return redirect("/upgrade-model")
         else:
             flash('Please upload the images (png or jpg) and labels (txt)!', 'error')
             return redirect("/upgrade-model")
     else:
         print('\n\n Mengembalikkan ke halaman upgrade model....\n')
+        flash('Please upload the images and labels!', 'error')
         return redirect('/upgrade-model')
 
 @app.route("/save-model")
