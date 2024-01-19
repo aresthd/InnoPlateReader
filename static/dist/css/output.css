@@ -1371,6 +1371,10 @@ input:checked + .toggle-bg{
   height: 24rem;
 }
 
+.h-\[100px\]{
+  height: 100px;
+}
+
 .h-auto{
   height: auto;
 }
@@ -1381,14 +1385,6 @@ input:checked + .toggle-bg{
 
 .h-screen{
   height: 100vh;
-}
-
-.h-\[\]{
-  height: ;
-}
-
-.h-\[100px\]{
-  height: 100px;
 }
 
 .min-h-fit{
