@@ -47,8 +47,8 @@ CONFIG_TRAIN = {
     'recall' : None
 }
 
-MODEL_YOLO = "D:/Coding/Projects/number-plate-recognition/model/best.pt"
-CONFIG = "D:/Coding/Projects/number-plate-recognition/static/config.yaml"
+MODEL_YOLO = "./model/best.pt"
+CONFIG = "./static/config.yaml"
 
 
 # Load a model
@@ -64,8 +64,8 @@ def train(epoch, confidence):
     time = f'{str(datetime.now().hour)}_{str(datetime.now().minute)}_{str(datetime.now().second)}'
     name = f'{date}_{time}'
     
-    result = model.train(data=CONFIG, epochs=epoch, project=basedirTraining, name=name)
     try:
+        result = model.train(data=CONFIG, epochs=epoch, project=basedirTraining, name=name)
         print(result)
         metrics = model.val(conf=confidence)
         # pathPlot = "static/dist/img"
@@ -89,7 +89,18 @@ def train(epoch, confidence):
         
         set_all_conf_train('success', name, model, pathModel, pathRun, pathVal, pathPlot, accuracy, precision, recall)
         return model, accuracy, precision, recall
-    
+    except IndexError as ae:
+        accuracy = 0
+        precision = 0
+        recall = 0
+        set_conf_train('status', 'add data')
+        return model, accuracy, precision, recall
+    except FileNotFoundError as ae:
+        accuracy = 0
+        precision = 0
+        recall = 0
+        set_conf_train('status', 'no image')
+        return model, accuracy, precision, recall
     except AttributeError as ae:
         accuracy = 0
         precision = 0
@@ -374,8 +385,14 @@ def train_model():
                 plotTrain = get_conf_train('path_plot')
                 set_conf_train('status', 'done')
                 return render_template('score.html', model=model, accuracy=accuracy, precision=precision, recall=recall, plotTrain=plotTrain)
+            elif status == 'no image':
+                flash('Please upload the images too!', 'error')
+                return redirect("/upgrade-model")
             elif status == 'no label':
                 flash('Please upload the labels too!', 'error')
+                return redirect("/upgrade-model")
+            elif status == 'add data':
+                flash('Please upload more data!', 'error')
                 return redirect("/upgrade-model")
         elif status == 'done':
             flash('Please upload the images and labels again!', 'error')
@@ -414,4 +431,4 @@ def res():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=3000, debug=True)

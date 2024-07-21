@@ -1,0 +1,11 @@
+- Total dataset 	: 1776	 -> 3552
+- Original			: 440
+- Addition 1 		: 377 (83+79+144+71)
+- Addition 2		: 602 (238+141+116+107)
+- Addition 3		: 364 (108+96+85+68)
+
+- K1	: 531	 	-> 1062
+- K2 	: 414 	-> 828
+- K3	: 485 	-> 970
+- K4 	: 346	-> 692
+8th testing of OB using 1776 data, 10 epoch, and do the spliting data to data train & test. Then create presentation
