@@ -1,0 +1,43 @@
+{% extends "layouts/app.html" %}
+
+{% block content %}
+    
+    <!-- Main Start -->
+    <section class="p-4 sm:ml-64">
+        <div class="p-4 ">
+            <!-- Header -->
+            <h2 class="text-3xl md:text-4xl font-montserrat font-bold text-accent mt-2 ">Score</h2>
+            <!-- Images -->
+            <div class="w-full mx-auto py-4 flex flex-col justify-between">
+                <!-- Score Image -->
+                <div class="mx-auto my-4 md:my-6 lg:my-8">
+                    <div class="max-w-md p-4 lg:p-5 mx-auto bg-white rounded-lg shadow-lg">
+                        <!-- <img class="transition-all duration-300 rounded-lg" src="{{ plotTrain }}" alt="Plot Train"> -->
+                        <img class="transition-all duration-300 rounded-lg shadow hover:shadow-lg md:hover:shadow-xl hover:shadow-gray-300 ease-in-out md:hover:scale-125 lg:hover:scale-150" src="{{ data['plotTrain'] }}" alt="Plot Train">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Result Train -->
+            <div class="max-w-sm mx-auto">
+                <!-- Result -->
+                <!-- <div class="w-2/3 flex flex-row justify-between lg:mt-4 mx-auto px-4 py-5 bg-primary rounded-lg shadow hover:shadow-lg md:hover:shadow-xl hover:shadow-gray-300 hover:border-primary transition duration-300 ease-in-out md:hover:scale-125 text-text hover:text-white font-montserrat font-semibold">
+                    <h3 class="text-base -mt-2 -ml-1">Accuracy</h3>
+                    <p class="text-right text-xl lg:text-2xl -mb-2">{{ accuracy }}%</p>
+                </div> -->
+                <!-- More -->
+                <div class="w-full mx-auto flex flex-col md:flex-row mt-2 md:mt-0 justify-center md:justify-around">
+                    <a href="/read-plate" class="w-fit mx-auto text-base text-center font-semibold rounded-md font-montserrat px-12 py-2 mt-4 md:mt-6 duration-300 text-text hover:text-white bg-primary border-primary border-2 focus:ring-4 focus:outline-none focus:ring-primary">
+                        Predict
+                    </a>
+                    <a href="/save-model" class="w-fit mx-auto text-base text-center font-semibold rounded-md font-montserrat px-9 py-2 mt-4 md:mt-6 duration-300 text-primary hover:text-white bg-white hover:bg-primary border-primary border-2 focus:ring-4 focus:outline-none focus:ring-primary">
+                        Save Model
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Main End -->
+    
+{% endblock %}   
+

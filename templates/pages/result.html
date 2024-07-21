@@ -1,0 +1,67 @@
+{% extends "layouts/app.html" %}
+
+{% block content %}
+    
+    <!-- Main Start -->
+    <section class="p-4 sm:ml-64">
+        <div class="p-4 ">
+            <!-- Header -->
+            <h2 class="text-3xl md:text-4xl font-montserrat font-bold text-accent mt-2 ">Result</h2>
+            <!-- Images -->
+            <div class="w-full mx-auto py-10 flex flex-col justify-between sm:border-slate-500 md:border-blue-500 lg:border-rose-500">
+                <!-- Original Image -->
+                <div class="mx-auto my-4 md:my-6 lg:my-8">
+                    <h3 class="text-xl md:text-2xl font-montserrat font-bold text-accent my-2">Original Image</h3>
+                    <div class="max-w-md p-4 lg:p-5 mx-auto bg-white rounded-lg shadow-lg">
+                        <!-- <img class="transition-all duration-300 rounded-lg shadow hover:shadow-lg md:hover:shadow-xl hover:shadow-gray-300 ease-in-out md:hover:scale-125" src="{{ url_for('static',filename='images/predict/TD_K1_AA2503XT.JPG') }}" alt="Original Image"> -->
+                        <img class="transition-all duration-300 rounded-lg shadow hover:shadow-lg md:hover:shadow-xl hover:shadow-gray-300 ease-in-out md:hover:scale-125" src='{{ data["filepath"] }}' alt="Original Image">
+                    </div>
+                </div>
+                <!-- Object Detection Image -->
+                <div class="mx-auto my-4 md:my-6 lg:my-8">
+                    <h3 class="text-xl md:text-2xl font-montserrat font-bold text-accent my-2">Object Detection Image</h3>
+                    <div class="max-w-md p-4 lg:p-5 mx-auto bg-white rounded-lg shadow-lg">
+                        <img class="transition-all duration-300 rounded-lg shadow hover:shadow-lg md:hover:shadow-xl hover:shadow-gray-300 ease-in-out md:hover:scale-125" src='{{ data["pathOB"] }}' alt="Object Detection Image">
+                    </div>
+                </div>
+                <!-- Crop Object -->
+                <div class="mx-auto my-4 md:my-6 lg:my-8">
+                    <h3 class="text-xl md:text-2xl font-montserrat font-bold text-accent my-2">Crop Object</h3>
+                    <div class="max-w-md p-4 lg:p-5 mx-auto bg-white rounded-lg shadow-lg">
+                        <img class="transition-all duration-300 rounded-lg shadow hover:shadow-lg md:hover:shadow-xl hover:shadow-gray-300 ease-in-out md:hover:scale-125" src='{{ data["pathCrop"] }}' alt="Crop Object Image">
+                    </div>
+                </div>
+                <!-- Text Detection Image -->
+                <div class="mx-auto my-4 md:my-6 lg:my-8">
+                    <h3 class="text-xl md:text-2xl font-montserrat font-bold text-accent my-2">Text Detection Image</h3>
+                    <div class="max-w-md p-4 lg:p-5 mx-auto bg-white rounded-lg shadow-lg">
+                        <img class="transition-all duration-300 rounded-lg shadow hover:shadow-lg md:hover:shadow-xl hover:shadow-gray-300 ease-in-out md:hover:scale-125" src='{{ data["pathTD"] }}' alt="Text Detection Image">
+                    </div>
+                </div>
+                
+            </div>
+            
+            <!-- Result Plate -->
+            <div class="max-w-sm mx-auto">
+                <!-- Result -->
+                <div class="w-2/3 flex flex-row justify-between lg:mt-4 mx-auto p-4 bg-primary rounded-lg shadow hover:shadow-lg md:hover:shadow-xl hover:shadow-gray-300 hover:border-primary transition duration-300 ease-in-out md:hover:scale-125 text-text hover:text-white font-montserrat font-semibold">
+                    <h3 class="text-base -mt-2 -ml-1">Result</h3>
+                    <p class="text-right text-xl lg:text-2xl -mb-2">{{ data['result_text_plate'] }}</p>
+                    <!-- <p class="text-right text-xl lg:text-2xl -mb-2">AA2503XT</p> -->
+                </div>
+                <!-- More -->
+                <div class="w-full mx-auto flex flex-col md:flex-row mt-2 md:mt-0 justify-center md:justify-around">
+                    <a href="/download-result" class="w-fit mx-auto text-base text-center font-semibold rounded-md font-montserrat px-9 py-2 mt-4 md:mt-6 duration-300 text-text hover:text-white bg-primary border-primary border-2 focus:ring-4 focus:outline-none focus:ring-primary">
+                        Download
+                    </a>
+                    <a href="/read-again" class="w-fit mx-auto text-base text-center font-semibold rounded-md font-montserrat px-9 py-2 mt-4 md:mt-6 duration-300 text-primary hover:text-white bg-white hover:bg-primary border-primary border-2 focus:ring-4 focus:outline-none focus:ring-primary">
+                        Read Again
+                    </a>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    <!-- Main End -->
+     
+{% endblock %}   

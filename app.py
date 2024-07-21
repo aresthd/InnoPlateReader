@@ -209,27 +209,42 @@ def get_conf_train(keyword):
 @app.route("/")
 @app.route("/index")
 def index():
-    return render_template("index.html")
+    data = {
+        'page' : 'Home',
+        'current_page' : 'home'
+    }
+    return render_template("pages/index.html", data=data)
 
-@app.route("/login")
-def login():
-    return render_template("login.html")
+@app.route("/about")
+def about():
+    data = {
+        'page' : 'About',
+        'current_page' : 'about'
+    }
+    return render_template("about.html", data=data)
 
-@app.route("/register")
-def register():
-    return render_template("register.html")
+
+
+# @app.route("/login")
+# def login():
+#     return render_template("login.html")
+
+# @app.route("/register")
+# def register():
+#     return render_template("register.html")
 
 @app.route("/read-plate")
 def read_plate():
     filepath = get_conf_predict('path_ori')
     filename = get_conf_predict('filename')
+    data = {
+        'page' : 'Read Plate',
+        'current_page' : 'read plate'
+    }
     if filepath != None:
-        print('\n Mengakses read plate dengan filepath...\n')
-        print(f'\n filepath : {filepath}...\n')
-        return render_template("read_plate.html", filepath=filepath, filename=filename)
-    else:
-        print('\n Mengakses read plate langsung...\n')
-        return render_template("read_plate.html")
+        data['filepath'] = filepath
+        data['filename'] = filename
+    return render_template("pages/read_plate.html", data=data)
 
 @app.route("/upload", methods=['GET', 'POST'])
 def upload():
@@ -237,26 +252,16 @@ def upload():
         f = request.files.get('file')
         filename = secure_filename(f.filename)
         if f and allowed_file(filename):
-            print('\n Mengecek ekstensi file...\n')
             ext = get_file_extension(filename)
             if ext != "txt":
-                print('\n Proses dimulai...\n')
                 filepath = os.path.join(app.config['UPLOADED_FOLDER_PREDICT'], filename)
                 set_all_conf_predict(filename=filename, path_ori=filepath)
-                print('\n Path berhasil diubah...\n')
                 f.save(filepath)
-                print('\n File berhasil disimpan...\n')
-                print('\n--------------')
-                print(filepath)
-                print(filename)
-                print('\n\n')
                 return redirect("/read-plate")
             else:
-                print('\n FIle bukan PNG / JPG...\n')
                 set_all_conf_predict(filename='error', path_ori='error')
                 return redirect("/read-plate")
         else:
-            print('\n FIle sembarangan...\n')
             set_all_conf_predict(filename='error', path_ori='error')
             return redirect("/read-plate")
     else:
@@ -290,30 +295,27 @@ def example_3():
 # Result Predict
 @app.route("/result", methods=['GET', 'POST'])
 def result():
-    print('\n--------------')
-    print('\n\n Mengakses /result....\n')
+    data = {
+        'page' : 'Result Detect',
+        'current_page' : 'read plate'
+    }
     filepath, filename = get_conf_predict('path_ori'), get_conf_predict('filename')
     if filepath != None and filepath != 'error' and filename != 'error':
-        print('\n\nStart Process Data....\n')
-        # start_process_read = request.form['start-process-read']
-        print(f'\n filepath : {filepath}...\n')
-        print(f'\n Start Predict Image...\n')
         result_text_plate = predict(filepath, filename)
         pathOB, pathCrop, pathTD = get_conf_predict('path_ob'), get_conf_predict('path_crop'), get_conf_predict('path_td')
-        return render_template('result.html', filepath=filepath, filename=filename, pathOB=pathOB, pathCrop=pathCrop, pathTD=pathTD, result_text_plate=result_text_plate)
+        data['filepath'], data['filename'], = filepath, filename
+        data['pathOB'], data['pathCrop'], data['pathTD'] = pathOB, pathCrop, pathTD
+        data['result_text_plate'] = result_text_plate
+        return render_template('pages/result.html', data=data)
     elif filepath == 'error' and filename == 'error':
-        print('\n Silahkan upload file jpg...\n')
         set_all_conf_predict()
         flash('Please upload images in JPG or PNG format!', 'error')
         return redirect("/read-plate")
     else:
-        print('\n\n Mengembalikkan ke halaman read_plate....\n')
         return redirect('/read-plate')
 
 @app.route("/download-result")
 def download_result():
-    print('\n--------------')
-    print('\n\n Mengakses /download-result....\n')
     filepath, filename = get_conf_predict('path_ori'), get_conf_predict('filename')
     if filepath != None:
         pathTD = get_conf_predict('path_td')
@@ -324,7 +326,6 @@ def download_result():
             as_attachment=True,
         )   
     else:
-        print('\n\n Mengembalikkan ke halaman read_plate....\n')
         return redirect('/read-plate')
     
 @app.route("/read-again")
@@ -334,7 +335,11 @@ def read_again():
 
 @app.route("/upgrade-model")
 def upgrade_model():
-    return render_template("upgrade_model.html")
+    data = {
+        'page' : 'Upgrade Model',
+        'current_page' : 'upgrade model'
+    }
+    return render_template("upgrade_model.html", data=data)
     
 @app.route("/upload-train", methods=['GET', 'POST'])
 def upload_train():
@@ -370,6 +375,10 @@ def upload_train():
 
 @app.route("/train-model", methods=['GET', 'POST'])
 def train_model():
+    data = {
+        'page' : 'Score Upgrade',
+        'current_page' : 'upgrade model'
+    }
     print('\n--------------')
     print('\n\n Mengakses /train....\n')
     status = get_conf_train('status')
@@ -384,7 +393,12 @@ def train_model():
             if status == 'success':
                 plotTrain = get_conf_train('path_plot')
                 set_conf_train('status', 'done')
-                return render_template('score.html', model=model, accuracy=accuracy, precision=precision, recall=recall, plotTrain=plotTrain)
+                data['model'] = model
+                data['accuracy'] = accuracy
+                data['precision'] = precision
+                data['recall'] = recall
+                data['plotTrain'] = plotTrain
+                return render_template('pages/score.html', data=data)
             elif status == 'no image':
                 flash('Please upload the images too!', 'error')
                 return redirect("/upgrade-model")
@@ -423,11 +437,15 @@ def save_model():
 
 @app.route("/score")
 def score():
-    return render_template('score.html')
+    data = {
+        'page' : 'Score Upgrade',
+        'current_page' : 'upgrade model'
+    }
+    return render_template('pages/score.html', data)
 
-@app.route("/res")
-def res():
-    return render_template('result.html')
+# @app.route("/res")
+# def res():
+#     return render_template('result.html')
 
 
 if __name__ == '__main__':

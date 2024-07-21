@@ -1,0 +1,129 @@
+{% extends "layouts/app.html" %}
+
+{% block content %}
+
+    <!-- Flash Message Start -->
+    {% with messages = get_flashed_messages(with_categories=true) %}  
+    {% if messages %} 
+        <section>
+            {% for category, message in messages %}   
+            <div id="toast-danger" class="flex items-center w-full max-w-xs p-4 mb-4 fixed top-5 right-5 z-10  rounded-lg shadow text-white bg-primary" role="alert">
+                <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 rounded-lg bg-red-800 text-red-200">
+                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 11.793a1 1 0 1 1-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 0 1-1.414-1.414L8.586 10 6.293 7.707a1 1 0 0 1 1.414-1.414L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414L11.414 10l2.293 2.293Z"/>
+                    </svg>
+                    <span class="sr-only">Error icon</span>
+                </div>
+                <div class="ms-3 text-sm font-normal">{{ message }}</div>
+                <button type="button" class="ms-auto -mx-1.5 -my-1.5 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 inline-flex items-center justify-center h-8 w-8 text-white hover:text-primary bg-primary hover:bg-background" data-dismiss-target="#toast-danger" aria-label="Close">
+                    <span class="sr-only">Close</span>
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                    </svg>
+                </button>
+            </div>
+            {% endfor %}  
+        </section>
+    {% endif %}  
+    {% endwith %}
+    <!-- Flash Message End -->
+
+    <!-- Main Start -->
+    <section class="p-4 sm:ml-64">
+        <div class="p-4">
+            <h2 id="sub-header" class="text-3xl md:text-4xl font-montserrat font-bold text-accent mt-2 ">Upgrade Your Model</h2>
+
+            <!-- File Upload -->
+            <div class="max-w-sm md:max-w-xl lg:max-w-4xl min-h-fit p-8 bg-white border border-gray-200 rounded-lg shadow-lg md:p-10 mx-auto mt-10">
+                <div class="flex flex-col items-center justify-center w-full">
+                    <label id="label-dropzone" for="dropzone-file" class="relative flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+                        <div id="tampilan-input-awal" class="opacity-100 flex flex-col items-center justify-center pt-5 pb-6">
+                            <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                            </svg>
+                            <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Please upload the images (png or jpg) and labels (txt)</p>
+                        </div>
+                        <!-- <input id="dropzone-file" type="file" name="input-image" class="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer" /> -->
+                        <div id="tampilan-input-akhir" class="opacity-0 absolute top-0 left-0 flex items-center justify-center w-full h-full font-medium text-sm text-gray-400">
+                            {{ dropzone.create(action='upload_train') }}
+                            {{ dropzone.load_js() }}
+                            {{ dropzone.style('width: 100%; height: 100%; text-align:center; vertical-align: middle; border: none; overflow-y: scroll') }}
+                        </div>
+                    </label>
+                </div>
+            </div>
+            
+            <!-- Hyperparameter -->
+            <div class="max-w-sm min-h-fit py-4 px-8 mx-auto mt-10">
+                <form action="/train-model" method="POST">
+                    <label for="epoch" class="block mb-3 text-base font-medium text-accent">Epoch</label>
+                    <div class="relative flex items-center">
+                        <button type="button" id="decrement-button" data-input-counter-decrement="epoch" class="bg-primary opacity-90 hover:opacity-100 border border-primary rounded-s-lg p-3 h-11 focus:ring-primary focus:ring-2 focus:outline-none">
+                            <svg class="w-3 h-3 text-text hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h16"/>
+                            </svg>
+                        </button>
+                        <input type="text" id="epoch" name="epoch" data-input-counter data-input-counter-min="1" data-input-counter-max="5" aria-describedby="helper-text-explanation" class="bg-white border-x-0 border-primary h-11 text-center text-primary text-sm focus:ring-primary focus:border-primaring-primary block w-full py-2.5" placeholder="1" required>
+                        <button type="button" id="increment-button" data-input-counter-increment="epoch" class="bg-primary opacity-90 hover:opacity-100 border border-primary rounded-e-lg p-3 h-11 focus:ring-primary focus:ring-2 focus:outline-none">
+                            <svg class="w-3 h-3 text-text hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <p id="helper-text-explanation" class="mt-2 mb-4 md:mb-6 text-sm text-gray-500">Please select a digit number from 1 to 5.</p>
+                    <label for="confidence" class="block mb-3 text-base font-medium text-accent">Confidence</label>
+                    <div class="relative flex items-center">
+                        <button type="button" id="decrement-button" data-input-counter-decrement="confidence" class="bg-primary opacity-90 hover:opacity-100 border border-primary rounded-s-lg p-3 h-11 focus:ring-primary focus:ring-2 focus:outline-none">
+                            <svg class="w-3 h-3 text-text hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h16"/>
+                            </svg>
+                        </button>
+                        <input type="text" id="confidence" name="confidence" data-input-counter data-input-counter-min="1" data-input-counter-max="100" aria-describedby="helper-text-explanation" class="bg-white border-x-0 border-primary h-11 text-center text-primary text-sm focus:ring-primary focus:border-primaring-primary block w-full py-2.5" placeholder="1" required>
+                        <button type="button" id="increment-button" data-input-counter-increment="confidence" class="bg-primary opacity-90 hover:opacity-100 border border-primary rounded-e-lg p-3 h-11 focus:ring-primary focus:ring-2 focus:outline-none">
+                            <svg class="w-3 h-3 text-text hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <p id="helper-text-explanation" class="mt-2 mb-4 md:mb-6 text-sm text-gray-500">Please select a digit number from 1 to 100.</p>
+                    
+                    <input id="start-train" type="hidden" name="start-train" value="False">
+                    <div class="mt-6 md:mt-8 text-center">
+                        <button type="submit" class="text-base text-center font-semibold rounded-md font-montserrat px-12 py-2 duration-300 text-text hover:text-white bg-primary opacity-90 hover:opacity-100 border-primary border-2 focus:ring-4 focus:outline-none focus:ring-primary">
+                            Train
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+    <!-- Main End -->
+
+{% endblock %}   
+
+
+{% block script %}
+    <script>
+        Dropzone.options.myDropzone = {
+            init: function() {
+                'upload-train'  // upload queue when button click
+            },
+        }
+    </script>
+    <script>
+        Dropzone.options.myDropzone = {
+            init: function () {
+                this.on("addedfile", function (file) {
+                    // File berhasil diupload, tampilkan elemen dengan id "tampilan-awal"
+                    document.querySelector('#tampilan-input-awal').classList.replace('flex', 'hidden')
+                    document.querySelector('#tampilan-input-akhir').classList.replace('opacity-0', 'opacity-100')
+                    document.querySelector('#tampilan-input-akhir').classList.remove('absolute', 'top-0', 'left-0')
+                    document.querySelector('#label-dropzone').classList.replace('h-64', 'h-96')                    
+                    document.querySelector('#sub-header').innerHTML = 'Dataset Preview'
+                    document.querySelector('#start-train').setAttribute('value', 'True')
+                });
+            }
+        };
+    </script>
+{% endblock %}   
