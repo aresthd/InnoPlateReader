@@ -1,0 +1,170 @@
+{% extends "layouts/landing.html" %}
+
+{% block content %}
+    <!-- Jumbotron Start -->
+    <section class="w-full py-5 md:py-8 xl:py-10 bg-secondary bg-opacity-50">
+        <div class="py-10 sm:py-11 md:py-16 lg:py-20 px-4 mx-auto w-3/4 text-center">
+            <h1 class="mb-4 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bree font-semibold leading-none text-accent">
+                About <span class="text-primary">InnoPlateReader</span>
+            </h1>
+            <p class="mb-4 mx-auto w-full md:w-5/6 xl:w-4/6 text-sm sm:text-base md:text-lg lg:text-lg font-proza font-normal text-slate-800">
+                Welcome to InnoPlateReader! Our mission is to provide an efficient and accurate solution for Automatic License Plate Recognition (ALPR) using state-of-the-art machine learning algorithms.
+            </p>
+        </div>
+    </section>
+    <!-- Jumbotron End -->
+
+    <!-- What Start -->
+    <section class="w-full py-10 lg:py-16 px-4">
+        <div class="mx-auto w-full xl:w-5/6 mt-4 py-4 mb-4 px-4 lg:px-8">
+            <div class="w-full pl-2 md:pl-4 lg:pl-6">
+                <h3 class="text-xl md:text-2xl xl:text-3xl mb-2 font-semibold font-proza text-accent">
+                    What is InnoPlateReader?
+                </h3>
+                <hr class="w-1/4 sm:w-1/5 md:w-1/6 lg:w-[10%] mt-4 mb-6 rounded border border-gray-300">
+                <p class="text-sm md:text-base xl:text-lg font-normal font-proza text-slate-600">
+                    InnoPlateReader is an advanced system designed to detect and read vehicle license plates from images. Our system leverages the power of the YOLOv8 (You Only Look Once) object detection algorithm and Optical Character Recognition (OCR) to ensure high accuracy and fast processing times.
+                </p>
+            </div>
+        </div> 
+    </section>  
+    <!-- What End -->
+
+    <!-- Mission Start -->
+    <section class="w-full py-10 lg:py-16 px-4 bg-white">
+        <div class="flex flex-col-reverse md:flex-row justify-between items-center space-y-4 mx-auto w-full xl:w-5/6 py-4 mb-6 px-4 lg:px-8">
+            <div class="w-full md:w-2/3 xl:w-3/5 mt-16 md:mt-0 pl-2 md:pl-4 lg:pl-6">
+                <h3 class="text-xl md:text-2xl xl:text-3xl mb-2 font-semibold font-proza text-accent">
+                    Our Mission
+                </h3>
+                <p class="mb-2 text-sm md:text-base xl:text-lg font-normal font-proza text-slate-600">
+                    At InnoPlateReader, we aim to make automatic license plate recognition accessible and reliable for everyone. Whether for security, toll collection, parking management, or any other application, our goal is to provide a robust solution that meets your needs.
+                </p>
+            </div>
+            <div class="relative z-20 mx-auto">
+                <img class="w-52 xl:w-64 h-[14.625rem] xl:h-[18rem] rounded-xl" src="static/assets/ai-illustration.jpg" alt="AI Illustration">
+                <div class="absolute -z-10 top-6 xl:top-7 left-6 xl:left-7 w-52 xl:w-64 h-[14.625rem] xl:h-[18rem] rounded-xl bg-primary"></div>
+            </div>
+        </div>
+    </section>
+    <!-- Mission End -->
+
+    <!-- Features Start -->
+    <section class="w-full py-10 lg:py-16 px-4 bg-background">
+        <div class="space-y-4 mx-auto w-full xl:w-5/6 py-4 mb-6 px-4 lg:px-8">
+            <div class="w-full pl-2 md:pl-4 lg:pl-6">
+                <h3 class="text-xl md:text-2xl xl:text-3xl mb-4 md:mb-6 xl:mb-10 font-semibold font-proza text-accent text-center">
+                    Key Features
+                </h3>
+                <div id="accordion-collapse" data-accordion="open" class="w-full space-y-4 md:space-y-0 grid grid-cols-1 md:grid-cols-2 md:gap-x-20 md:gap-y-12 md:place-content-between xl:gap-x-32 xl:gap-y-16">
+                    <div class="w-full h-fit border-2 border-primary rounded-lg bg-white">
+                        <h2 id="accordion-collapse-heading-1" class="w-full">
+                            <button type="button" class="flex items-center justify-between w-full p-5 font-proza font-medium xl:text-lg rtl:text-right text-slate-700 gap-3 rounded-lg bg-white" data-accordion-target="#accordion-collapse-body-1" aria-expanded="false" aria-controls="accordion-collapse-body-1">
+                                <span>License Plate Detection</span>
+                                <svg data-accordion-icon class="w-3 h-3 text-primary rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"/>
+                                </svg>
+                            </button>
+                        </h2>
+                        <div id="accordion-collapse-body-1" aria-labelledby="accordion-collapse-heading-1" class="hidden bg-white rounded-lg">
+                            <div class="p-5 border-t border-gray-300">
+                                <p class="mb-2 text-gray-600 font-proza font-normal">
+                                    Using the YOLOv8 algorithm, InnoPlateReader accurately detects the location of license plates in uploaded images.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-full h-fit border-2 border-primary rounded-lg bg-white">
+                        <h2 id="accordion-collapse-heading-2" class="w-full">
+                            <button type="button" class="flex items-center justify-between w-full p-5 font-proza font-medium xl:text-lg rtl:text-right text-slate-700 gap-3 rounded-lg bg-white" data-accordion-target="#accordion-collapse-body-2" aria-expanded="false" aria-controls="accordion-collapse-body-2">
+                                <span>Optical Character Recognition</span>
+                                <svg data-accordion-icon class="w-3 h-3 text-primary rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"/>
+                                </svg>
+                            </button>
+                        </h2>
+                        <div id="accordion-collapse-body-2" aria-labelledby="accordion-collapse-heading-2" class="hidden bg-white rounded-lg">
+                            <div class="p-5 border-t border-gray-300">
+                                <p class="mb-2 text-gray-600 font-proza font-normal">
+                                    After detecting the license plate, our OCR module reads the characters on the plate with high precision.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-full h-fit border-2 border-primary rounded-lg bg-white">
+                        <h2 id="accordion-collapse-heading-3" class="w-full">
+                            <button type="button" class="flex items-center justify-between w-full p-5 font-proza font-medium xl:text-lg rtl:text-right text-slate-700 gap-3 rounded-lg bg-white" data-accordion-target="#accordion-collapse-body-3" aria-expanded="false" aria-controls="accordion-collapse-body-3">
+                                <span>User-Friendly Interface</span>
+                                <svg data-accordion-icon class="w-3 h-3 text-primary rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"/>
+                                </svg>
+                            </button>
+                        </h2>
+                        <div id="accordion-collapse-body-3" aria-labelledby="accordion-collapse-heading-3" class="hidden bg-white rounded-lg">
+                            <div class="p-5 border-t border-gray-300">
+                                <p class="mb-2 text-gray-600 font-proza font-normal">
+                                    Our web interface, built with TailwindCSS and Flask, allows users to easily interact with the system.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-full h-fit border-2 border-primary rounded-lg bg-white">
+                        <h2 id="accordion-collapse-heading-4" class="w-full">
+                            <button type="button" class="flex items-center justify-between w-full p-5 font-proza font-medium xl:text-lg rtl:text-right text-slate-700 gap-3 rounded-lg bg-white" data-accordion-target="#accordion-collapse-body-4" aria-expanded="false" aria-controls="accordion-collapse-body-4">
+                                <span>Model Upgrade Capability</span>
+                                <svg data-accordion-icon class="w-3 h-3 text-primary rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"/>
+                                </svg>
+                            </button>
+                        </h2>
+                        <div id="accordion-collapse-body-4" aria-labelledby="accordion-collapse-heading-4" class="hidden bg-white rounded-lg">
+                            <div class="p-5 border-t border-gray-300">
+                                <p class="mb-2 text-gray-600 font-proza font-normal">
+                                    Users can upload new datasets to improve the model's performance, set training parameters, and view training results, including the confusion matrix.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section> 
+    <!-- Features End -->
+
+    <!-- Team Start -->
+    <section class="w-full py-10 lg:py-16 px-4 bg-white">
+        <div class="space-y-4 mx-auto w-full xl:w-5/6 py-4 mb-6 px-4 lg:px-8">
+            <div class="w-full pl-2 md:pl-4 lg:pl-6">
+                <h3 class="text-xl md:text-2xl xl:text-3xl mb-4 md:mb-6 xl:mb-10 font-semibold font-proza text-accent text-center">
+                    Our Team
+                </h3>
+                <div class="flex flex-col-reverse md:flex-row justify-between items-center mx-auto w-full">
+                    <div class="w-full md:w-2/3 xl:w-3/5 mt-16 md:mt-0">
+                        <h4 class="text-center md:text-left text-2xl md:text-4xl xl:text-5xl mb-1 md:mb-2 font-medium font-bree text-slate-900">
+                            Arieska Restu
+                        </h4>
+                        <p class="mb-4 text-center md:text-left text-sm md:text-base xl:text-lg font-montserrat font-medium italic text-primary">
+                            Informatics Engineering Student
+                        </p>
+                        <p class="flex flex-col md:block text-sm md:text-base xl:text-lg font-normal font-proza text-slate-600">
+                            <span class="mb-2">
+                                InnoPlateReader was created by Arieska Restu, a passionate developer and AI enthusiast dedicated to building innovative solutions using machine learning and computer vision.                        
+                            </span>
+                            <span class="mb-2">
+                                With a background in AI engineering and a commitment to excellence, he has designed InnoPlateReader to be both powerful and user-friendly, ensuring it meets the needs of various applications.                        
+                            </span>
+                        </p>
+                    </div>
+                    <div class="relative z-20 mx-auto">
+                        <img class="w-60 h-60 xl:w-72 xl:h-72 rounded-xl" src="static/assets/self-photo.jpg" alt="Photo Profile">
+                        <div class="absolute -z-10 top-6 xl:top-7 left-6 xl:left-7 w-60 h-60 xl:w-72 xl:h-72 rounded-xl bg-primary"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section> 
+    <!-- Team End -->
+
+
+
+{% endblock %}   

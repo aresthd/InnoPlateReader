@@ -221,7 +221,7 @@ def about():
         'page' : 'About',
         'current_page' : 'about'
     }
-    return render_template("about.html", data=data)
+    return render_template("pages/about.html", data=data)
 
 
 
