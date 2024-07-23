@@ -2,13 +2,13 @@
 
 {% block content %}
     <!-- Jumbotron Start -->
-    <section class="w-full py-5 md:py-8 xl:py-10 bg-secondary bg-opacity-50">
+    <section class="w-full py-5 md:py-8 xl:py-10 mt-20 bg-secondary bg-opacity-50">
         <div class="py-10 sm:py-11 md:py-16 lg:py-20 px-4 mx-auto w-3/4 text-center">
             <h1 class="mb-4 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bree font-semibold leading-none text-accent">
                 About <span class="text-primary">InnoPlateReader</span>
             </h1>
             <p class="mb-4 mx-auto w-full md:w-5/6 xl:w-4/6 text-sm sm:text-base md:text-lg lg:text-lg font-proza font-normal text-slate-800">
-                Welcome to InnoPlateReader! Our mission is to provide an efficient and accurate solution for Automatic License Plate Recognition (ALPR) using state-of-the-art machine learning algorithms.
+                Welcome to InnoPlateReader! Our mission is to provide an efficient and accurate solution for Automatic Number Plate Recognition (ANPR) using state-of-the-art machine learning algorithms.
             </p>
         </div>
     </section>
@@ -120,7 +120,7 @@
                         <div id="accordion-collapse-body-4" aria-labelledby="accordion-collapse-heading-4" class="hidden bg-white rounded-lg">
                             <div class="p-5 border-t border-gray-300">
                                 <p class="mb-2 text-gray-600 font-proza font-normal">
-                                    Users can upload new datasets to improve the model's performance, set training parameters, and view training results, including the confusion matrix.
+                                    You can upload new datasets to improve the model's performance, set training parameters, and view training results, including the confusion matrix.
                                 </p>
                             </div>
                         </div>
@@ -165,6 +165,37 @@
     </section> 
     <!-- Team End -->
 
+    <!-- Touch Start -->
+    <section class="w-full py-10 lg:py-16 px-4">
+        <div class="mx-auto w-full xl:w-5/6 py-4 mb-4 px-4 lg:px-8">
+            <div class="mx-auto w-full md:w-5/6 xl:w-4/6 pl-2 md:pl-4 lg:pl-6">
+                <h3 class="text-xl md:text-2xl xl:text-3xl mb-4 md:mb-5 xl:mb-6 font-semibold font-proza text-accent text-center">
+                    Get in Touch
+                </h3>
+                <p class="mb-2 text-sm md:text-base xl:text-lg text-center font-proza font-normal text-slate-600">
+                    If you have any questions, suggestions, or need support, please don't hesitate to contact us. We value your feedback and are here to help you make the most of InnoPlateReader.
+                </p>
+                <p class="mt-2 text-sm md:text-base xl:text-lg pt-4 text-center font-proza font-medium text-slate-700 italic">
+                    Thank you for choosing <a href="/" class="hover:underline duration-100">InnoPlateReader</a class=""> and for supporting our mission.
+                </p>
+            </div>
+        </div>
+    </section> 
+    <!-- Touch End -->
 
+    <!-- More Start -->
+    <section class="w-full p-4 bg-secondary bg-opacity-50">
+        <div class="mx-auto w-full xl:w-5/6 py-4 px-4 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center mx-auto w-full px-2 md:px-4 lg:px-6">
+                <h2 class="mb-4 md:mb-0 text-xl md:text-2xl xl:text-3xl font-semibold font-montserrat text-accent text-center">
+                    More About <a href="/" class="hover:text-primary duration-100">InnoPlateReader</a>
+                </h2>
+                <a href="https://github.com/AcilRestu12/InnoPlateReader" target="_blank" class="w-fit h-fit text-sm md:text-base text-center font-semibold rounded-md font-montserrat px-6 sm:px-7 md:px-9 py-2 duration-100 text-text hover:text-white bg-accent/80 hover:bg-accent border-accent border-2 focus:ring-4 focus:outline-none focus:ring-accent">
+                    Read More
+                </a>            
+            </div>
+        </div>
+    </section> 
+    <!-- More End -->
 
 {% endblock %}   

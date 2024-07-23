@@ -339,7 +339,7 @@ def upgrade_model():
         'page' : 'Upgrade Model',
         'current_page' : 'upgrade model'
     }
-    return render_template("upgrade_model.html", data=data)
+    return render_template("pages/upgrade_model.html", data=data)
     
 @app.route("/upload-train", methods=['GET', 'POST'])
 def upload_train():
