@@ -4,20 +4,56 @@ import cv2
 import imutils
 import easyocr
 from ultralytics import YOLO
-from datetime import datetime
+import shutil
+from datetime import datetime, timedelta
 
+
+def create_dir(base_dir):
+    # Tanggal hari ini
+    today = datetime.now()
+    today_dir_name = today.strftime('%d-%m-%Y')
+    today_dir_path = os.path.join(base_dir, today_dir_name)
+    
+    # Tanggal 5 hari yang lalu
+    ten_days_ago = today - timedelta(days=5)
+
+    # Cek semua direktori di base_dir
+    for dir_name in os.listdir(base_dir):
+        dir_path = os.path.join(base_dir, dir_name)
+        
+        if os.path.isdir(dir_path):
+            try:
+                dir_date = datetime.strptime(dir_name, '%d-%m-%Y')
+                # Hapus direktori yang lebih dari 5 hari yang lalu
+                if dir_date < ten_days_ago:
+                    shutil.rmtree(dir_path)
+            except ValueError:
+                # Jika nama direktori tidak sesuai format tanggal, lewati
+                continue
+    
+    # Buat direktori untuk hari ini jika belum ada
+    if not os.path.exists(today_dir_path):
+        os.makedirs(today_dir_path)
+
+    return today_dir_name
+
+
+def create_dir_upload(dir_predict, dir_train_img, dir_train_label):
+    basedir = os.getcwd()
+    create_dir(os.path.join(basedir, dir_predict))
+    create_dir(os.path.join(basedir, dir_train_img))
+    create_dir(os.path.join(basedir, dir_train_label))
 
 # Train
 def train(model, config, config_train, epoch, confidence):
-    basedirTraining = os.path.join('static', 'training')
     confidence = confidence / 100
+    # basedirTraining = os.path.join('static', 'training')
+    basedirTraining = os.path.join(os.getcwd(), 'static', 'training')
+    basedirTraining = os.path.join('static', 'training', create_dir(basedirTraining))
+    date_now = f'{str(datetime.now().day)}-{str(datetime.now().strftime("%m"))}-{str(datetime.now().year)}'
 
-    date = f'{str(datetime.now().day)}_{str(datetime.now().month)}_{str(datetime.now().year)}'
-    time = f'{str(datetime.now().hour)}_{str(datetime.now().minute)}_{str(datetime.now().second)}'
-    name = f'{date}_{time}'
-    
     try:
-        result = model.train(data=config, epochs=epoch, project=basedirTraining, name=name)
+        result = model.train(data=config, epochs=epoch, project=basedirTraining, name=date_now)
         print(result)
         metrics = model.val(conf=confidence)
         # pathPlot = "static/dist/img"
@@ -37,7 +73,7 @@ def train(model, config, config_train, epoch, confidence):
         precision = (tp / (tp+fp)) * 100
         recall = (tp /(tp+fn)) * 100
         
-        set_all_conf_train(config_train, 'success', name, model, pathModel, pathRun, pathVal, pathPlot, accuracy, precision, recall)
+        set_all_conf_train(config_train, 'success', date_now, model, pathModel, pathRun, pathVal, pathPlot, accuracy, precision, recall)
         return model, accuracy, precision, recall
     except IndexError as ae:
         accuracy = 0
@@ -60,8 +96,11 @@ def train(model, config, config_train, epoch, confidence):
     
 # Predict
 def predict(model, config_predict, path_image, filename):
-    basedirPredict = 'static\images\predict'
-    
+    # date_now = f'{str(datetime.now().day)}-{str(datetime.now().strftime("%m"))}-{str(datetime.now().year)}'
+    # basedirPredict = f'static\images\predict\{date_now}'
+    basedirPredict = os.path.join(os.getcwd(), 'static', 'images', 'predict')
+    basedirPredict = os.path.join('static', 'images', 'predict', create_dir(basedirPredict))
+
     # Load image
     img = cv2.imread(path_image)
     imgSize = img.shape[0:2]

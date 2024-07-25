@@ -7,13 +7,19 @@ from datetime import datetime
 from utils import *
 
 basedir = os.path.abspath(os.path.dirname(__file__))
+UPLOADED_FOLDER_PREDICT = os.path.join('static', 'uploads')
+UPLOADED_FOLDER_TRAIN_IMG = os.path.join('static', 'images', 'train')
+UPLOADED_FOLDER_TRAIN_LABEL = os.path.join('static', 'labels', 'train')
+
+
+DATE_NOW = datetime.now().strftime('%d-%m-%Y')
 
 app = Flask(__name__)
 app.secret_key = "secret key"
 app.config.update(
-    UPLOADED_FOLDER_PREDICT = os.path.join('static', 'uploads'),
-    UPLOADED_FOLDER_TRAIN_IMG = os.path.join('static', 'images', 'train'),
-    UPLOADED_FOLDER_TRAIN_LABEL = os.path.join('static', 'labels', 'train'),
+    UPLOADED_FOLDER_PREDICT = os.path.join(UPLOADED_FOLDER_PREDICT, DATE_NOW),
+    UPLOADED_FOLDER_TRAIN_IMG = os.path.join(UPLOADED_FOLDER_TRAIN_IMG, DATE_NOW),
+    UPLOADED_FOLDER_TRAIN_LABEL = os.path.join(UPLOADED_FOLDER_TRAIN_LABEL, DATE_NOW),
     DROPZONE_TIMEOUT = 5 * 60 * 1000,
     DROPZONE_ADD_REMOVE_LINKS = True
 )
@@ -47,10 +53,14 @@ CONFIG_TRAIN = {
 MODEL_YOLO = "./model/best.pt"
 CONFIG = "./static/config.yaml"
 
-
 # Load a model
 MODEL = YOLO(MODEL_YOLO)
 
+
+# Handle Error 404
+@app.errorhandler(404)
+def handle_404(e):
+    return redirect("/")
 
 @app.route("/")
 @app.route("/index")
@@ -101,6 +111,8 @@ def upload():
             if ext != "txt":
                 filepath = os.path.join(app.config['UPLOADED_FOLDER_PREDICT'], filename)
                 set_all_conf_predict(CONFIG_PREDICT, filename=filename, path_ori=filepath)
+                basedirTraining = os.path.join(os.getcwd(), 'static', 'training')
+                basedirTraining = os.path.join('static', 'training', create_dir(basedirTraining))
                 f.save(filepath)
                 return redirect("/read-plate")
             else:
@@ -273,4 +285,5 @@ def score():
 
 
 if __name__ == '__main__':
+    create_dir_upload(UPLOADED_FOLDER_PREDICT, UPLOADED_FOLDER_TRAIN_IMG, UPLOADED_FOLDER_TRAIN_LABEL)
     app.run(host='0.0.0.0', port=3000, debug=True)
