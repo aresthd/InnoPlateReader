@@ -1,0 +1,19 @@
+services:
+    innoplatereader:
+        build: 
+            context: ./
+        image: innoplatereader:1.0
+        working_dir: /app
+        container_name: InnoPlateReader
+        ports:
+            - "5000:5000"
+        environment:
+            - FLASK_APP=InnoPlateReader
+        volumes:
+            - ./:/app
+        networks:
+            - ipr_network
+
+networks:
+    ipr_network:
+        name: ipr_network

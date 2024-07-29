@@ -1,0 +1,9 @@
+/env
+/dataset
+/tensorflow
+/run
+/runs
+/node_modules
+/base_model
+/static/training
+/__pycache__
