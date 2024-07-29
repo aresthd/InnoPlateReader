@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for, send_file, flash
 from flask_dropzone import Dropzone
 from werkzeug.utils import secure_filename
+from gevent.pywsgi import WSGIServer
+# from waitress import serve
 import os
 from ultralytics import YOLO
 from datetime import datetime
@@ -279,11 +281,20 @@ def score():
     }
     return render_template('pages/score.html', data)
 
-# @app.route("/res")
-# def res():
-#     return render_template('result.html')
-
 
 if __name__ == '__main__':
     create_dir_upload(UPLOADED_FOLDER_PREDICT, UPLOADED_FOLDER_TRAIN_IMG, UPLOADED_FOLDER_TRAIN_LABEL)
-    app.run(host='0.0.0.0', port=3000, debug=True)
+    
+    # Debug/Development
+    # app.run(debug=True, host="0.0.0.0", port="5000")
+    
+    # Production
+    
+    # Serve the app with waitress
+    # serve(app, host="0.0.0.0", port=5000)
+    
+    # Serve the app with gevent
+    # http_server = WSGIServer(('', 5000), app)
+    http_server = WSGIServer(('0.0.0.0', 5000), app)
+    http_server.serve_forever()
+    
