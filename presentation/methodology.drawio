@@ -188,6 +188,9 @@
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
+        <mxCell id="EvVDbxU5-r7a8cyKMDp8-38" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.rect;fillColor2=none;strokeWidth=1;size=20;indent=5;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="-843.75" y="-845.64" width="960" height="850.96" as="geometry" />
+        </mxCell>
         <mxCell id="moqRggU3RBvshnneC5y1-5" value="" style="group" vertex="1" connectable="0" parent="1">
           <mxGeometry x="-480" y="-800" width="232.5" height="199.69000000000005" as="geometry" />
         </mxCell>
