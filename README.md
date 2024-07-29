@@ -21,7 +21,7 @@ InnoPlateReader is a Web-based system designed to detect and read vehicle licens
 ## Implementation Stages
 The implementation stage of this project is as shown below.
 
-![Implementation stages](/presentation/implementation-stage.jpg)
+![Implementation stages](/presentation/stages.jpg)
 
 
 ## Installation
