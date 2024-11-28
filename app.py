@@ -285,8 +285,8 @@ def score():
 if __name__ == '__main__':
     create_dir_upload(UPLOADED_FOLDER_PREDICT, UPLOADED_FOLDER_TRAIN_IMG, UPLOADED_FOLDER_TRAIN_LABEL)
     
-    # Debug/Development
-    app.run(debug=True, host="0.0.0.0", port="5000")
+    # # Debug/Development
+    # app.run(debug=True, host="0.0.0.0", port="5000")
     
     # Production
     
@@ -298,3 +298,5 @@ if __name__ == '__main__':
     # http_server = WSGIServer(('0.0.0.0', 5000), app)
     # http_server.serve_forever()
     
+    # # Production on arest.tech
+    app.run(debug=False)
