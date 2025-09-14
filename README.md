@@ -28,7 +28,7 @@ The implementation stage of this project is as shown below.
 How to install InnoPlateReader:
 1. Clone this repository
    ```
-   git clone https://github.com/AcilRestu12/InnoPlateReader.git
+   git clone https://github.com/aresthd/InnoPlateReader.git
    cd InnoPlateReader
    ```
 2. Setting path in /static/config.yaml
@@ -54,7 +54,7 @@ Or you can get the application image by pull from Docker Hub:
 1. Run your Docker
 2. Pull the image
     ```
-    docker pull acilrestu12/innoplatereader
+    docker pull aresthd/innoplatereader
     ```
 3. Build and run the Docker container
     ```
